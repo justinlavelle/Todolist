@@ -1,0 +1,27 @@
+section
+  header(style="webkit-app-region: drag")
+    datepicker(value="2015-02-02")
+    //h1 {{ getDate }}
+    input(type="text", class="new-todo", placeholder="Ajouter une tache" v-model="newTodo" @keyup.enter="addTodo")
+  .taches
+    h2(v-if="todos.length <= 0") Il n'y a aucune tache
+    ul(v-if='!this.transition')
+      mixin liste
+        li(v-for="(todo, index) in filteredTodos", :key="todo", :class="{editing: todo === editing, completed: todo.completed, first: index === (todos.length - todos.length)}")
+          .view
+            input(type="checkbox" @click="completed(todo)", :checked="todo.completed").toggle
+            span(@dblclick="editTodo(todo)") {{ todo.hour }}
+            label(@dblclick="editTodo(todo)") {{ todo.name }}
+            button.destroy(@click.prevent="deleteTodo(todo)")
+          input(type="text", class="edit", @keyup.enter="doneEdit(todo._id, todo.name)", @blur="doneEdit", v-model="todo.name", v-focus="todo === editing")
+      +liste()
+    transition-group(v-else, name="slide", tag='ul')
+      +liste()
+  footer(v-if="todos.length > 0")
+    input.toggle-all(type="checkbox", v-model="allDone")
+    span {{ todos.length }} taches restantes
+    ul
+      li: a(href="#", @click.prevent="filter = 'all'", :class="{selected: filter === 'all'}") All
+      li: a(href="#", @click.prevent="filter = 'todo'", :class="{selected: filter === 'todo'}") Todo
+      li: a(href="#", @click.prevent="filter = 'completed'", :class="{selected: filter === 'completed'}") Completed
+    button(@click.prevent="deleteCompleted()") Supprimer
