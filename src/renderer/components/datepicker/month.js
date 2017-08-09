@@ -19,4 +19,8 @@ export default class month {
     const range1 = moment.range(this.start, this.end)
     return Array.from(range1.by('day', { exlusive: true }))
   }
+
+  getFormatted () {
+    return this.start.format('MMMM YYYY')
+  }
 }

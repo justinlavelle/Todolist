@@ -1,7 +1,7 @@
 <template lang="pug">
 .datepicker
   input(type="text", :value="date_formatted")
-  datepicker-agenda(:date="date")
+  datepicker-agenda(:date="date", @update:date="val => date = val")
 </template>
 
 <script>
