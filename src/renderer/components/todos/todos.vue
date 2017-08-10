@@ -28,7 +28,7 @@ export default {
     },
     addTodo () {
       this.transition = true
-      database.addTodos(this.newTodo, this.getHour())
+      database.addTodos(this.newTodo, this.getHour(), this.changeddate)
       this.asyncReload('todos')
       this.newTodo = ''
     },
@@ -86,7 +86,7 @@ export default {
       dd = dd < 10 ? '0' + dd : dd
       mm = mm < 10 ? '0' + mm : mm
 
-      return dd + ' / ' + mm + ' / ' + yyyy
+      return yyyy + '-' + mm + '-' + dd
     },
     remaining () {
       return this.todos.filter(todo => !todo.completed).length

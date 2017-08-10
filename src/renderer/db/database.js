@@ -26,11 +26,12 @@ let updateTodo = (id, name, hour) => {
   })
 }
 
-let addTodos = (name, hour) => {
+let addTodos = (name, hour, date) => {
   db.insert({
     completed: false,
     name: name,
-    hour: hour
+    hour: hour,
+    date: date
   }, function (err, newDoc) {
     if (err) { console.log(err) }
   })
