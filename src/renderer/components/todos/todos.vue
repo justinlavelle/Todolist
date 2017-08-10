@@ -10,6 +10,7 @@ export default {
   data () {
     return {
       todos: {},
+      changeddate: this.getDate,
       newTodo: '',
       filter: 'all',
       transition: false,
@@ -22,6 +23,9 @@ export default {
     }
   },
   methods: {
+    date (date) {
+      this.changeddate = date
+    },
     addTodo () {
       this.transition = true
       database.addTodos(this.newTodo, this.getHour())

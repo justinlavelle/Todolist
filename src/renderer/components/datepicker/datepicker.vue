@@ -32,6 +32,7 @@ export default {
     selectDate (date) {
       this.date = date
       this.hideDatePicker()
+      this.$emit('selecteddate', date)
     }
   },
   computed: {
