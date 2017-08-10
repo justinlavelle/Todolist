@@ -1,7 +1,7 @@
 <template lang="pug">
 .datepicker
-  input(type="text", :value="date_formatted")
-  datepicker-agenda(:date="date", @update:date="val => date = val")
+  input(type="text", :value="date_formatted", @click="showDatePicker")
+  datepicker-agenda(:date="date", :visible="isVisible", @change="selectDate", @cancel="hideDatePicker")
 </template>
 
 <script>
@@ -18,7 +18,20 @@ export default {
   },
   data () {
     return {
+      isVisible: false,
       date: moment(this.value, 'YYYY-MM-DD')
+    }
+  },
+  methods: {
+    hideDatePicker () {
+      this.isVisible = false
+    },
+    showDatePicker () {
+      this.isVisible = true
+    },
+    selectDate (date) {
+      this.date = date
+      this.hideDatePicker()
     }
   },
   computed: {

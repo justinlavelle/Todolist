@@ -1,5 +1,5 @@
 <template lang="pug">
-.agenda
+.agenda(v-if="visible")
   .header
       span.year {{ year }}
       span.date {{ date_formatted }}
@@ -18,13 +18,18 @@
     .day(v-for="day in month.getDays()", @click="selectDate(day)", :class="{selected: isSelected(day)}")
       span.overlay
       span.text {{ day.format('D') }}
+  button(@click="submit") Ok
+  button(@click="cancel") Cancel
 </template>
 
 <script>
 import Month from './month.js'
 
 export default {
-  props: ['date'],
+  props: {
+    date: {},
+    visible: { type: Boolean, default: true }
+  },
   data () {
     return {
       mutableDate: this.date,
@@ -52,18 +57,24 @@ export default {
       this.month = new Month(month, year)
     },
     isSelected (day) {
-      return this.date.unix() === day.unix()
+      return this.mutableDate.unix() === day.unix()
     },
     selectDate (day) {
-      this.$emit('update:date', day.clone())
+      this.mutableDate = day
+    },
+    submit () {
+      this.$emit('change', this.mutableDate)
+    },
+    cancel () {
+      this.$emit('cancel')
     }
   },
   computed: {
     year () {
-      return this.date.format('YYYY')
+      return this.mutableDate.format('YYYY')
     },
     date_formatted () {
-      return this.date.format('dddd DD MMM')
+      return this.mutableDate.format('dddd DD MMM')
     }
   }
 }
