@@ -51,9 +51,11 @@ export default {
 .dateFormatted
   cursor: pointer
 .slideUp-enter-active
-  transition: all .1s ease-in-out
+  transition: all .5s cubic-bezier(0,.54,.5,1)
 .slideUp-enter
-  transform: translateY(-400px)
-.slideUp-enter-t0
-  transform: translateY(0)
+  opacity: 0
+  transform: scale(0) translateY(-400px)
+.slideUp-enter-to
+  opacity: 1
+  transform: scale(1) translateY(0)
 </style>
