@@ -1076,7 +1076,8 @@ function createWindow() {
   mainWindow = new __WEBPACK_IMPORTED_MODULE_0_electron__["BrowserWindow"]({
     useContentSize: true,
     titleBarStyle: 'hidden-inset',
-    width: 400
+    height: 800,
+    width: 550
   });
 
   mainWindow.loadURL(winURL);
@@ -2574,7 +2575,7 @@ function wrappy (fn, cb) {
 
 process.env.NODE_ENV = 'development';
 
-__webpack_require__(26)({ showDevTools: true });
+__webpack_require__(26)({ showDevTools: false });
 
 __webpack_require__(2).app.on('ready', function () {
   var installExtension = __webpack_require__(28);

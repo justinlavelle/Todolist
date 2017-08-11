@@ -14,12 +14,13 @@
           path(d="M198.608,246.104L382.664,62.04c5.068-5.056,7.856-11.816,7.856-19.024c0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12C361.476,2.792,354.712,0,347.504,0s-13.964,2.792-19.028,7.864L109.328,227.008c-5.084,5.08-7.868,11.868-7.848,19.084c-0.02,7.248,2.76,14.028,7.848,19.112l218.944,218.932c5.064,5.072,11.82,7.864,19.032,7.864c7.208,0,13.964-2.792,19.032-7.864l16.124-16.12c10.492-10.492,10.492-27.572,0-38.06L198.608,246.104z")
     .weekdays(v-for="(day, index) in days", key="index")
       | {{day}}
-    .spacer(:style="{width: (month.getWeekStart() * 41) + 'px'}")
+    .spacer(:style="{width: (month.getWeekStart() * 52) + 'px'}")
     .day(v-for="day in month.getDays()", @click="selectDate(day)", :class="{selected: isSelected(day)}")
       span.overlay
       span.text {{ day.format('D') }}
-  button(@click="submit") Ok
-  button(@click="cancel") Cancel
+    .buttons
+      button(@click="submit") Ok
+      button(@click="cancel") Cancel
 </template>
 
 <script>
@@ -82,13 +83,29 @@ export default {
 
 <style lang="sass" scoped>
 .agenda
-  background: white
-  border: 1px solid #000
+  background: rgba(white, 0.8)
   position: absolute
-  top: 100%
-  z-index: 9
+  box-shadow: 2px 6px 8px 3px rgba(black, 0.1)
+  top: 130px
+  width: 392px
+  left: 0
+  right: 0
+  margin: auto
+  z-index: 2
+  &:before
+    content: ''
+    position: absolute
+    top: -17px
+    left: 0
+    right: 0
+    margin: auto
+    width: 0
+    height: 0
+    border-style: solid
+    border-width: 0 17.5px 17px 17.5px
+    border-color: transparent transparent rgba(#55C9FF, 0.7) transparent
   .header
-    background: red
+    background: rgba(#55C9FF, 0.7)
     color: white
     padding: 1.5em
     .year
@@ -97,7 +114,8 @@ export default {
     .date
       font-size: 1.5em
   .days
-    width: 294px
+    width: 392px
+    padding: 0 14px 14px 14px
     .controls
       position: relative
       height: 56px
@@ -117,9 +135,10 @@ export default {
         outline: none
         cursor: pointer
         svg
+          margin-top: 1.1em
           width: 24px
           height: 24px
-          fill: black
+          fill: rgba(black, 0.2)
           vertical-align: middle
         &.next
           float: right
@@ -127,19 +146,21 @@ export default {
           float: left
     .weekdays
       text-align: center
+      border-bottom: 1px solid #c2c2c2
+      margin-bottom: 1.5em
       padding: 14px
-      width: 41px
+      width: 52px
       display: inline-block
     .spacer
-      height: 41px
+      height: 52px
       vertical-align: top
       text-align: center
       display: inline-block
     .day
       position: relative
       cursor: pointer
-      height: 41px
-      width: 41px
+      height: 52px
+      width: 52px
       vertical-align: top
       text-align: center
       display: inline-block
@@ -161,14 +182,25 @@ export default {
         transform: scale(0)
         opacity: 0
         top: -8px
-        left: 3px
+        left: 8px
         height: 36px
         width: 36px
         border-radius: 50%
-        background: red
+        background: #55C9FF
       .text
         transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
         position: relative
         color: black
-
+  .buttons
+    text-align: right
+    button
+      background: #55C9FF
+      cursor: pointer
+      outline: none
+      border: 1px solid #55C9FF
+      padding: .6em 1em
+      border-radius: .2em
+      margin-left: 1em
+      color: white
+      text-transform: uppercase
 </style>

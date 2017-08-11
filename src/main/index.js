@@ -22,7 +22,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     useContentSize: true,
     titleBarStyle: 'hidden-inset',
-    width: 400
+    height: 800,
+    width: 550
   })
 
   mainWindow.loadURL(winURL)

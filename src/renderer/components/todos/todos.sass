@@ -88,7 +88,7 @@ section
           &.slide-enter
             transform: translateX(-400px)
           &.slide-enter-to
-            transorm: translateX(0)
+            transform: translateX(0)
         &:not(:last-child)
           border-bottom: 1px solid $grey
         &:hover
@@ -153,13 +153,12 @@ section
   footer
     box-shadow: 0 -5px 10px 1px rgba(0,0,0,0.1)
     background: white
-    z-index: 2
+    z-index: 1
     width: 100%
     position: fixed
     bottom: 0
     border-top: 1px solid $grey
     padding: .5em .5em
-
     label[for='toggle-all']
       display: none
     .toggle-all

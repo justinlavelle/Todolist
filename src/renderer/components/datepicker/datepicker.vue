@@ -1,7 +1,8 @@
 <template lang="pug">
 .datepicker
   span.dateFormatted(type="text", @click="showDatePicker") {{ date_formatted }}
-  datepicker-agenda(:date="date", :visible="isVisible", @change="selectDate", @cancel="hideDatePicker")
+  transition(name="slideUp")
+    datepicker-agenda(:date="date", :visible="isVisible", @change="selectDate", @cancel="hideDatePicker")
 </template>
 
 <script>
@@ -45,3 +46,14 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+.dateFormatted
+  cursor: pointer
+.slideUp-enter-active
+  transition: all .1s ease-in-out
+.slideUp-enter
+  transform: translateY(-400px)
+.slideUp-enter-t0
+  transform: translateY(0)
+</style>
