@@ -1,8 +1,8 @@
 import db from '../datastore'
 
-let getTodos = _ => {
+let getTodos = (date) => {
   return new Promise((resolve, reject) => {
-    db.find({}).sort({ hour: -1 }).exec((err, docs) => {
+    db.find({ date: date }).sort({ hour: -1 }).exec((err, docs) => {
       if (err) { reject(err) } else { resolve(docs) }
     })
   })

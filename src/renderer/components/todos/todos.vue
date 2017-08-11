@@ -10,7 +10,7 @@ export default {
   data () {
     return {
       todos: {},
-      changeddate: this.getDate,
+      changeddate: this.getDate(),
       newTodo: '',
       filter: 'all',
       transition: false,
@@ -19,12 +19,14 @@ export default {
   },
   asyncData: {
     todos () {
-      return database.getTodos()
+      return database.getTodos(this.changeddate)
     }
   },
   methods: {
     date (date) {
+      this.transition = false
       this.changeddate = date
+      this.asyncReload('todos')
     },
     addTodo () {
       this.transition = true
@@ -63,6 +65,17 @@ export default {
     doneEdit (id, todo) {
       database.updateTodo(id, todo, this.getHour())
       this.asyncReload('todos')
+    },
+    getDate () {
+      let today = new Date()
+      let dd = today.getDate()
+      let mm = today.getMonth() + 1
+      let yyyy = today.getFullYear()
+
+      dd = dd < 10 ? '0' + dd : dd
+      mm = mm < 10 ? '0' + mm : mm
+
+      return yyyy + '-' + mm + '-' + dd
     }
   },
   computed: {
@@ -76,17 +89,6 @@ export default {
         })
         database.setAllCompleted()
       }
-    },
-    getDate () {
-      let today = new Date()
-      let dd = today.getDate()
-      let mm = today.getMonth() + 1
-      let yyyy = today.getFullYear()
-
-      dd = dd < 10 ? '0' + dd : dd
-      mm = mm < 10 ? '0' + mm : mm
-
-      return yyyy + '-' + mm + '-' + dd
     },
     remaining () {
       return this.todos.filter(todo => !todo.completed).length

@@ -1,6 +1,6 @@
 <template lang="pug">
 .datepicker
-  input(type="text", :value="date_formatted", @click="showDatePicker")
+  span.dateFormatted(type="text", @click="showDatePicker") {{ date_formatted }}
   datepicker-agenda(:date="date", :visible="isVisible", @change="selectDate", @cancel="hideDatePicker")
 </template>
 
@@ -32,7 +32,7 @@ export default {
     selectDate (date) {
       this.date = date
       this.hideDatePicker()
-      this.$emit('selecteddate', date)
+      this.$emit('selecteddate', this.date_formatted)
     }
   },
   computed: {
