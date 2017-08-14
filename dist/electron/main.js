@@ -1100,7 +1100,7 @@ __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('activate', function () {
     createWindow();
   }
 });
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src\\main"))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src/main"))
 
 /***/ }),
 /* 8 */
@@ -2604,7 +2604,7 @@ function map_obj(obj, fn){
   }, {})
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, "node_modules\\7zip"))
+/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/7zip"))
 
 /***/ }),
 /* 17 */
@@ -3478,7 +3478,7 @@ exports.uninstall = () => {
 
 exports.path = __dirname
 
-/* WEBPACK VAR INJECTION */}.call(exports, "node_modules\\devtron"))
+/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/devtron"))
 
 /***/ }),
 /* 26 */

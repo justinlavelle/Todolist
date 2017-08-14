@@ -15,8 +15,9 @@
     .weekdays(v-for="(day, index) in days", key="index")
       | {{day}}
     .spacer(:style="{width: (month.getWeekStart() * 52) + 'px'}")
-    .day(v-for="day in month.getDays()", @click="selectDate(day)", :class="{selected: isSelected(day)}")
+    .day(v-for="day in month.getDays()", @click="selectDate(day)", :class="{tasked: isTasked(day.format('YYYY-MM-DD')), selected: isSelected(day)}")
       span.overlay
+      // span {{ isTasked(day.format('YYYY-MM-DD')) }}
       span.text {{ day.format('D') }}
     .buttons
       button(@click="submit") Ok
@@ -26,6 +27,8 @@
 <script>
 import Month from './month.js'
 
+import * as db from '../../db/database.js'
+
 export default {
   props: {
     date: {},
@@ -33,6 +36,7 @@ export default {
   },
   data () {
     return {
+      test: false,
       mutableDate: this.date,
       days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
       month: new Month(this.date.month(), this.date.year())
@@ -56,6 +60,17 @@ export default {
         month = 11
       }
       this.month = new Month(month, year)
+    },
+    /* eslint-disable */
+
+    isTasked: async function (day) {
+      return await db.isTodo(day).then((response) => {
+        if (response.length > 0) {
+          return true
+        } else {
+          return false
+        }
+      })
     },
     isSelected (day) {
       return this.mutableDate.unix() === day.unix()

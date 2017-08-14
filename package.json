@@ -1,12 +1,12 @@
 {
-  "name": "testtest",
+  "name": "Todolist",
   "version": "0.0.0",
   "author": "blaadje <acharlot91@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder --win",
+    "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
@@ -55,6 +55,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "babel-polyfill": "^6.23.0",
+    "du-clickoutside": "^1.0.0",
     "jquery": "^3.2.1",
     "moment": "^2.18.1",
     "moment-range": "^3.0.3",
@@ -67,6 +68,7 @@
     "vue": "^2.3.3",
     "vue-async-data": "^1.0.2",
     "vue-async-data-2": "^0.0.2",
+    "vue-color": "^2.3.2",
     "vue-electron": "^1.0.6",
     "vue-router": "^2.5.3",
     "vuex": "^2.3.1"

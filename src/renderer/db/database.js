@@ -13,6 +13,16 @@ let setCompleted = (todo) => {
     if (err) { console.error(err) }
   })
 }
+/* eslint-disable */
+let isTodo = (date) => {
+  return new Promise((resolve, reject) => {
+    db.find({ date: date }).exec((err, docs) => {
+      if (err) { reject(err) } else {
+        resolve(docs)
+      }
+    })
+  })
+}
 
 let setAllCompleted = _ => {
   db.update({}, { $set: { completed: true } }, { multi: true }, (err, docs) => {
@@ -48,4 +58,4 @@ let deleteCompleted = _ => {
     if (err) { console.log(err) }
   })
 }
-export {getTodos, updateTodo, setCompleted, setAllCompleted, addTodos, deleteTodos, deleteCompleted}
+export {getTodos, isTodo, updateTodo, setCompleted, setAllCompleted, addTodos, deleteTodos, deleteCompleted}

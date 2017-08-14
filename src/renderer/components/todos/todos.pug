@@ -1,7 +1,11 @@
 section
-  header(style="webkit-app-region: drag")
-    datepicker(:value="changeddate", @selecteddate="date")
-    //h1 {{ getDate }}
+  header(:style="{ background: colors.hex }")
+    datepicker(style="webkit-app-region: drag", :value="changeddate", @selecteddate="date")
+    transition(name="slideUp")
+      .pickerContent(v-if="pickerVisible")
+        sketch-picker(v-model="colors")
+        button(@click="pickerVisible=false") Ok
+    img(src="../../assets/color-picker.svg", @click="pickerVisible = true").picker
     input(type="text", class="new-todo", placeholder="Ajouter une tache" v-model="newTodo" @keyup.enter="addTodo")
   .taches
     h2(v-if="todos.length <= 0") Il n'y a aucune tache
