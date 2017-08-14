@@ -68,7 +68,7 @@ export default {
     },
     saveColor () {
       this.pickerVisible = false
-      database.addColor(this.colors)
+      database.addColor(this.colors, this.getHour())
     },
     date (date) {
       this.transition = false

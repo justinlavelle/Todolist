@@ -9,7 +9,7 @@ let getTodos = (date) => {
 }
 let getColor = _ => {
   return new Promise((resolve, reject) => {
-    db.find({ type: 'color' }).limit(1).exec((err, docs) => {
+    db.find({ type: 'color' }).sort({ hour: -1 }).limit(1).exec((err, docs) => {
       if (err) { reject(err) } else { resolve(docs) }
     })
   })
@@ -58,10 +58,11 @@ let addTodos = (name, hour, date) => {
     if (err) { console.log(err) }
   })
 }
-let addColor = (color) => {
+let addColor = (color, hour) => {
   db.insert({
     color: color,
-    type: 'color'
+    type: 'color',
+    hour: hour
   }, function (err, newDoc) {
     if (err) { console.log(err) }
   })

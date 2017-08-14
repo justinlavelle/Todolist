@@ -4,7 +4,7 @@ section
     transition(name="slideUp")
       .pickerContent(v-if="pickerVisible")
         sketch-picker(v-model="colors")
-        button(@click="saveColor") Ok
+        button(@click="saveColor", :style="{ background: this.colors.hex, border: '1px solid' + this.colors.hex }") Ok
     img(src="../../assets/color-picker.svg", @click="pickerVisible = true").picker
     input(type="text", class="new-todo", placeholder="Ajouter une tache" v-model="newTodo" @keyup.enter="addTodo")
   .taches

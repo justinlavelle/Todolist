@@ -17,7 +17,7 @@
       | {{day}}
     .spacer(:style="{width: (month.getWeekStart() * 52) + 'px'}")
     .day(v-for="day in month.getDays()", @click="selectDate(day)", :class="{tasked: isTasked(day.format('YYYY-MM-DD')), selected: isSelected(day)}")
-      span.overlay
+      span.overlay(:style="{ background: color2.hex }") 
       // span {{ isTasked(day.format('YYYY-MM-DD')) }}
       span.text {{ day.format('D') }}
     .buttons
@@ -201,7 +201,7 @@ export default {
         height: 36px
         width: 36px
         border-radius: 50%
-        background: #55C9FF
+        //background: #55C9FF
       .text
         transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
         position: relative
