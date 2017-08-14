@@ -1,6 +1,7 @@
 <template lang="pug">
 .agenda(v-if="visible")
-  .header
+  .triangle(:style="{ borderColor: 'transparent transparent rgba(' + this.color2.rgba.r + ', ' + this.color2.rgba.g + ', ' + this.color2.rgba.b + ', 0.8) transparent' }")
+  .header(:style="{ background: this.color2.hex, opacity: 0.8 }")
       span.year {{ year }}
       span.date {{ date_formatted }}
   .days
@@ -20,8 +21,8 @@
       // span {{ isTasked(day.format('YYYY-MM-DD')) }}
       span.text {{ day.format('D') }}
     .buttons
-      button(@click="submit") Ok
-      button(@click="cancel") Cancel
+      button(@click="submit", :style="{ background: this.color2.hex, border: '1px solid' + this.color2.hex }") Ok
+      button(@click="cancel", :style="{ background: this.color2.hex, border: '1px solid' + this.color2.hex }") Cancel
 </template>
 
 <script>
@@ -32,7 +33,8 @@ import * as db from '../../db/database.js'
 export default {
   props: {
     date: {},
-    visible: { type: Boolean, default: true }
+    visible: { type: Boolean, default: true },
+    color2: { type: Object }
   },
   data () {
     return {
@@ -107,7 +109,7 @@ export default {
   right: 0
   margin: auto
   z-index: 2
-  &:before
+  .triangle
     content: ''
     position: absolute
     top: -17px
@@ -118,9 +120,7 @@ export default {
     height: 0
     border-style: solid
     border-width: 0 17.5px 17px 17.5px
-    border-color: transparent transparent rgba(#55C9FF, 0.7) transparent
   .header
-    background: rgba(#55C9FF, 0.7)
     color: white
     padding: 1.5em
     .year

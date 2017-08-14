@@ -1,5 +1,4 @@
 <template lang="pug" src="./todos.pug"></template>
-
 <script>
 import Vue from 'vue'
 import * as database from '../../db/database'
@@ -37,8 +36,8 @@ export default {
   data () {
     return {
       todos: {},
-      pickerVisible: false,
       colors: defaultProps,
+      pickerVisible: false,
       changeddate: this.getDate(),
       newTodo: '',
       filter: 'all',
@@ -49,9 +48,28 @@ export default {
   asyncData: {
     todos () {
       return database.getTodos(this.changeddate)
+    },
+    colors () {
+      return database.getColor().then((resolve) => {
+        return resolve[0].color
+      })
     }
   },
   methods: {
+    buttons (element) {
+      if (this.filter === element) {
+        return {
+          'border': '1px solid' + this.colors.hex,
+          'color': this.colors.hex
+        }
+      } else {
+        return 'border: 1px solid #c2c2c2'
+      }
+    },
+    saveColor () {
+      this.pickerVisible = false
+      database.addColor(this.colors)
+    },
     date (date) {
       this.transition = false
       this.changeddate = date

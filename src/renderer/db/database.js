@@ -7,6 +7,18 @@ let getTodos = (date) => {
     })
   })
 }
+let getColor = _ => {
+  return new Promise((resolve, reject) => {
+    db.find({ type: 'color' }).limit(1).exec((err, docs) => {
+      if (err) { reject(err) } else { resolve(docs) }
+    })
+  })
+}
+let removeColors = _ => {
+  db.remove({ type: 'color' }, { multi: true }, function (err, numRemoved) {
+    if (err) { console.log(err) }
+  })
+}
 
 let setCompleted = (todo) => {
   db.update({'name': todo.name}, { $set: {'completed': todo.completed} }, (err, docs) => {
@@ -46,6 +58,14 @@ let addTodos = (name, hour, date) => {
     if (err) { console.log(err) }
   })
 }
+let addColor = (color) => {
+  db.insert({
+    color: color,
+    type: 'color'
+  }, function (err, newDoc) {
+    if (err) { console.log(err) }
+  })
+}
 
 let deleteTodos = (todo) => {
   db.remove({ name: todo.name }, { multi: false }, function (err, numRemoved) {
@@ -58,4 +78,4 @@ let deleteCompleted = _ => {
     if (err) { console.log(err) }
   })
 }
-export {getTodos, isTodo, updateTodo, setCompleted, setAllCompleted, addTodos, deleteTodos, deleteCompleted}
+export {removeColors, getColor, addColor, getTodos, isTodo, updateTodo, setCompleted, setAllCompleted, addTodos, deleteTodos, deleteCompleted}

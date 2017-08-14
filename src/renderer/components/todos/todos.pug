@@ -1,10 +1,10 @@
 section
   header(:style="{ background: colors.hex }")
-    datepicker(style="webkit-app-region: drag", :value="changeddate", @selecteddate="date")
+    datepicker(style="webkit-app-region: drag", :value="changeddate", @selecteddate="date", :color1="colors")
     transition(name="slideUp")
       .pickerContent(v-if="pickerVisible")
         sketch-picker(v-model="colors")
-        button(@click="pickerVisible=false") Ok
+        button(@click="saveColor") Ok
     img(src="../../assets/color-picker.svg", @click="pickerVisible = true").picker
     input(type="text", class="new-todo", placeholder="Ajouter une tache" v-model="newTodo" @keyup.enter="addTodo")
   .taches
@@ -25,7 +25,9 @@ section
     input.toggle-all(type="checkbox", v-model="allDone")
     span {{ todos.length }} taches restantes
     ul
-      li: a(href="#", @click.prevent="filter = 'all'", :class="{selected: filter === 'all'}") All
-      li: a(href="#", @click.prevent="filter = 'todo'", :class="{selected: filter === 'todo'}") Todo
-      li: a(href="#", @click.prevent="filter = 'completed'", :class="{selected: filter === 'completed'}") Completed
-    button(@click.prevent="deleteCompleted()") Supprimer
+      //li: a(href="#", @click.prevent="filter = 'all'", :style="{selected: filter === 'all'}") All
+      //li: a(href="#", @click.prevent="filter = 'all'", :style="{ border: filter === 'all' ? 1 + 'px solid' + colors.hex : 1 + 'px solid #c2c2c2'}") All
+      li: a(href="#", @click.prevent="filter = 'all'", :style="buttons('all')") All
+      li: a(href="#", @click.prevent="filter = 'todo'", :style="buttons('todo')") Todo
+      li: a(href="#", @click.prevent="filter = 'completed'", :style="buttons('completed')") Completed
+    button(@click.prevent="deleteCompleted()", :style="{ background: colors.hex }") Supprimer

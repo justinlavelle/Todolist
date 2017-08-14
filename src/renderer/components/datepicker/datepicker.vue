@@ -2,7 +2,7 @@
 .datepicker
   span.dateFormatted(type="text") {{ date_formatted }}
   transition(name="slideUp")
-    datepicker-agenda(:date="date", :visible="isVisible", @change="selectDate", @cancel="hideDatePicker")
+    datepicker-agenda(:date="date", :color2="color1", :visible="isVisible", @change="selectDate", @cancel="hideDatePicker")
   img(src="../../assets/calendar.svg", @click="showDatePicker").calendar
 </template>
 
@@ -16,7 +16,8 @@ export default {
   components: { datepickerAgenda },
   props: {
     value: { type: String, required: true },
-    format: { type: String, default: 'YYYY-MM-DD' }
+    format: { type: String, default: 'YYYY-MM-DD' },
+    color1: { type: Object, required: true }
   },
   data () {
     return {
