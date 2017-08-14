@@ -6,7 +6,7 @@ import datepicker from '../datepicker/datepicker'
 import { Sketch } from 'vue-color'
 
 var defaultProps = {
-  hex: '#194d33',
+  hex: '#5CBCE9',
   hsl: {
     h: 150,
     s: 0.5,
