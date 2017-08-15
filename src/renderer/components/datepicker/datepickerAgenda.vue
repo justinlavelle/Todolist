@@ -1,5 +1,5 @@
 <template lang="pug">
-.agenda(v-if="visible")
+.agenda(v-if="isVisible")
   .triangle(:style="{ borderColor: 'transparent transparent rgba(' + this.color2.rgba.r + ', ' + this.color2.rgba.g + ', ' + this.color2.rgba.b + ', 0.8) transparent' }")
   .header(:style="{ background: this.color2.hex, opacity: 0.8 }")
       span.year {{ year }}
@@ -93,6 +93,12 @@ export default {
     }
   },
   computed: {
+    isVisible () {
+      if (this.visible) {
+        this.asyncReload('taskedDays')
+        return true
+      } else { return false }
+    },
     year () {
       return this.mutableDate.format('YYYY')
     },
@@ -142,6 +148,7 @@ export default {
       line-height: 56px
       text-align: center
       label
+        color: #757575
         position: absolute
         top: 0
         left: 0
@@ -168,6 +175,7 @@ export default {
       text-align: center
       border-bottom: 1px solid #c2c2c2
       margin-bottom: 1.5em
+      color: #757575
       padding: 14px
       width: 52px
       display: inline-block
@@ -220,7 +228,7 @@ export default {
       .text
         transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
         position: relative
-        color: black
+        color: #757575
   .buttons
     text-align: right
     button

@@ -57,11 +57,7 @@ let addTodos = (name, hour, date) => {
   })
 }
 let addColor = (color, hour) => {
-  db.insert({
-    color: color,
-    type: 'color',
-    hour: hour
-  }, function (err, newDoc) {
+  db.update({ type: 'color' }, { type: 'color', color: color, hour: hour }, { upsert: true }, function (err, numReplaced, upsert) {
     if (err) { console.log(err) }
   })
 }
