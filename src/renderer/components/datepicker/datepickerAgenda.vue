@@ -16,10 +16,12 @@
     .weekdays(v-for="(day, index) in days", key="index")
       | {{day}}
     .spacer(:style="{width: (month.getWeekStart() * 52) + 'px'}")
-    .day(v-for="day in month.getDays()", @click="selectDate(day)", :class="{tasked: isTasked(day.format('YYYY-MM-DD')), selected: isSelected(day)}")
-      span.overlay(:style="{ background: color2.hex }") 
-      // span {{ isTasked(day.format('YYYY-MM-DD')) }}
+    .day(v-for="day in month.getDays()", @click="selectDate(day)", :class="{selected: isSelected(day)}")
+      span.overlay(:style="{ background: color2.hex }")
+      .test(v-for="taskedDay in taskedDays")
+        span.taskedOverlay(v-if="taskedDay.date === day.format('YYYY-MM-DD')")
       span.text {{ day.format('D') }}
+      
     .buttons
       button(@click="submit", :style="{ background: this.color2.hex, border: '1px solid' + this.color2.hex }") Ok
       button(@click="cancel", :style="{ background: this.color2.hex, border: '1px solid' + this.color2.hex }") Cancel
@@ -27,7 +29,6 @@
 
 <script>
 import Month from './month.js'
-
 import * as db from '../../db/database.js'
 
 export default {
@@ -38,10 +39,15 @@ export default {
   },
   data () {
     return {
-      test: false,
+      taskedDays: {},
       mutableDate: this.date,
       days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
       month: new Month(this.date.month(), this.date.year())
+    }
+  },
+  asyncData: {
+    taskedDays () {
+      return db.isTodo(this.getMonth())
     }
   },
   methods: {
@@ -53,6 +59,15 @@ export default {
         month = 0
       }
       this.month = new Month(month, year)
+      this.asyncReload('taskedDays')
+    },
+    getMonth () {
+      let mm = this.month.month + 1
+      let yy = this.month.year
+
+      mm = mm < 10 ? '0' + mm : mm
+
+      return yy + '-' + mm
     },
     prevMonth () {
       let month = this.month.month - 1
@@ -62,17 +77,7 @@ export default {
         month = 11
       }
       this.month = new Month(month, year)
-    },
-    /* eslint-disable */
-
-    isTasked: async function (day) {
-      return await db.isTodo(day).then((response) => {
-        if (response.length > 0) {
-          return true
-        } else {
-          return false
-        }
-      })
+      this.asyncReload('taskedDays')
     },
     isSelected (day) {
       return this.mutableDate.unix() === day.unix()
@@ -196,12 +201,22 @@ export default {
         position: absolute
         transform: scale(0)
         opacity: 0
+        z-index: 0
         top: -8px
         left: 8px
         height: 36px
         width: 36px
         border-radius: 50%
-        //background: #55C9FF
+      .taskedOverlay
+        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
+        position: absolute
+        z-index: -1
+        border: 1px solid #c2c2c2
+        top: -8px
+        left: 8px
+        height: 36px
+        width: 36px
+        border-radius: 50%
       .text
         transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
         position: relative

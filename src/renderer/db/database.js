@@ -25,13 +25,11 @@ let setCompleted = (todo) => {
     if (err) { console.error(err) }
   })
 }
-/* eslint-disable */
+
 let isTodo = (date) => {
   return new Promise((resolve, reject) => {
-    db.find({ date: date }).exec((err, docs) => {
-      if (err) { reject(err) } else {
-        resolve(docs)
-      }
+    db.find({ date: new RegExp(date) }).exec((err, docs) => {
+      if (err) { reject(err) } else { resolve(docs) }
     })
   })
 }
@@ -79,4 +77,16 @@ let deleteCompleted = _ => {
     if (err) { console.log(err) }
   })
 }
-export {removeColors, getColor, addColor, getTodos, isTodo, updateTodo, setCompleted, setAllCompleted, addTodos, deleteTodos, deleteCompleted}
+export {
+  removeColors,
+  getColor,
+  addColor,
+  getTodos,
+  isTodo,
+  updateTodo,
+  setCompleted,
+  setAllCompleted,
+  addTodos,
+  deleteTodos,
+  deleteCompleted
+}
