@@ -1,5 +1,9 @@
 # Todo app
 
+![alt text][logo]
+
+[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+
 Todo-list is a desktop application made with electron-vue which allows you to create tasks and organize your time
 
 Windows : https://www.dropbox.com/s/8l3i2es014mdpqi/Todolist%20Setup%200.1.2.exe?dl=0
