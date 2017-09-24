@@ -1,6 +1,6 @@
 # Todo app
 
-<img src="https://github.com/blaadje/Todo-list/raw/master/presentation.jpg " width="300" />
+<img src="https://github.com/blaadje/Todo-list/raw/master/presentation.jpg " width="400" />
 
 Todo-list is a desktop application made with electron-vue which allows you to create tasks and organize your time
 
