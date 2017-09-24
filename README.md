@@ -1,6 +1,6 @@
 # Todo app
 
-> An electron-vue project
+Todo-list is a desktop application made with electron-vue which allows you to create tasks and organize your time
 
 Windows : https://www.dropbox.com/s/8l3i2es014mdpqi/Todolist%20Setup%200.1.2.exe?dl=0
 
