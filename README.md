@@ -1,27 +1,16 @@
-# testtest
+# Todo app
 
 > An electron-vue project
+
+A download link can be found here : https://www.dropbox.com/s/8l3i2es014mdpqi/Todolist%20Setup%200.1.2.exe?dl=0
 
 #### Build Setup
 
 ``` bash
-git clone https://github.com/blaadje/electron-vue.git mon-folder
+git clone https://github.com/blaadje/Todo-list.git my folder
 
 # install dependencies
-npm install
-
-# serve with hot reload at localhost:9080
-npm run dev
-
-# build electron application for production
-npm run build
-
-
-# lint all JS/Vue component files in `src/`
-npm run lint
+yarn
 
 ```
 
----
-
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[9c9bf75](https://github.com/SimulatedGREG/electron-vue/tree/9c9bf75630add075bfa58f52e391e82fb1b9f44a) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
