@@ -2,7 +2,7 @@
 
 ![alt text][logo]
 
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+[logo]: https://github.com/blaadje/Todo-list/raw/master/presentation.jpg 
 
 Todo-list is a desktop application made with electron-vue which allows you to create tasks and organize your time
 
