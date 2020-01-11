@@ -1,8 +1,13 @@
-import Datastore from 'nedb'
-import path from 'path'
 import { remote } from 'electron'
+import low from 'lowdb'
+import FileSync from 'lowdb/adapters/FileSync'
+import path from 'path'
 
-export default new Datastore({
-  autoload: true,
-  filename: path.join(remote.app.getPath('userData'), '/data.db')
-})
+const adapter = new FileSync(
+  path.join(remote.app.getPath('userData'), '/data.json'),
+)
+const db = low(adapter)
+
+db.defaults({ todos: [], color: null }).write()
+
+export default db

@@ -8,6 +8,8 @@ $lightGrey: #757575
 body, h1, h2
   font-family: 'Nunito', sans-serif
   background: white
+  padding: 0
+  margin: 0
 
 *
   box-sizing: border-box
@@ -18,6 +20,11 @@ body, h1, h2
 .cf:after
   clear: both
 
+label
+  color: #757575
+  font-size: 1.2em
+  font-weight: 100
+
 section
   margin: 0
   padding: 0
@@ -27,12 +34,12 @@ section
     position: fixed
     padding: 0
     z-index: 2
-    img
+    .calendar,
+    .picker
       width: 20px
+      height: 20px
       fill: black
-      position: absolute
       transition: .8s all cubic-bezier(0,.54,.5,1)
-      top: 26%
       cursor: pointer
       margin: auto
       &.calendar
@@ -44,14 +51,23 @@ section
         transform: scale(1.3) rotate(5deg)
     .datepicker
       position: relative
-      span.dateFormatted
-        display: inline-block
-        font-size: 1.7em
-        padding: 1.4em 1em
-        font-weight: 100
-        text-align: center
+      padding: 2.5em 1em
+      display: flex
+      align-items: center
+      justify-content: center
+      &:before
+        content: ''
         width: 100%
+        flex: 5
+      .dateFormatted
+        flex: 2
+        font-size: 1.7em
+        font-weight: 100
         color: white
+      .icons
+        flex: 4
+      .calendar
+        margin-right: 2rem
     .vc-sketch
       position: absolute
       left: 0
@@ -105,11 +121,9 @@ section
       color: grey
       font-weight: 100
       font-size: 1.2em
-
     ul
-      margin: 0
       padding: 0
-
+      margin: 0
       li 
         position: relative
         margin: 0
@@ -145,11 +159,6 @@ section
           color: $grey
           display: block
           margin: .3em 0
-
-        label
-          color: #757575
-          font-size: 1.2em
-          font-weight: 100
 
         .toggle
           float: left
@@ -234,26 +243,46 @@ section
       display: block
       text-align: center
 
-    ul
-      text-align: center
-      margin: 1em 0
-      padding: 0
+    .filtersWrapper
+      display: flex
+      justify-content: center
+      margin: 1rem 0
 
-      li
-        display: inline-block
-        &:not(:last-child)
-          margin-right: 1em
-        a
-          border: 1px solid $grey
-          padding: .5em 1em
-          font-size: .8em
-          color: $grey
-          text-decoration: none
-          &.selected
-            border: 1px solid #6ac7ff
-            color: #6ac7ff
+    .filters
+      display: inline-flex
+      margin: 0 auto
+      width: auto
+      flex-direction: column
+      label
+        font-size: 0.9rem
 
-    button
+    .filterWrapper,
+    .statusWrapper
+      display: flex
+      align-items: center
+
+    .filterWrapper
+      margin-bottom: 1rem
+
+    .dateLabel
+      margin-right: 0.6rem
+
+    .filterButton
+      background: transparent
+      outline: none
+      border: 1px solid $grey
+      white-space: nowrap
+      padding: .5em 1em
+      margin-left: 1rem
+      border-radius: 0
+      font-size: .8em
+      color: $grey
+      text-decoration: none
+      &.selected
+        border: 1px solid #6ac7ff
+        color: #6ac7ff
+
+    .deleteButton
       border: none
       border-radius: .2em
       outline: none

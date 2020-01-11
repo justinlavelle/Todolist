@@ -1,7 +1,7 @@
 import db from './datastore'
 import Vue from 'vue'
 import axios from 'axios'
-import App from './App'
+import App from './components/App'
 import { AsyncDataPlugin } from 'vue-async-data-2'
 
 Vue.use(AsyncDataPlugin)
@@ -12,6 +12,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
 }).$mount('#app')
+
 Vue.prototype.$db = db

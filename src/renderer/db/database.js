@@ -1,77 +1,41 @@
 import db from '../datastore'
 
-let getTodos = (date) => {
-  return new Promise((resolve, reject) => {
-    db.find({ date: date }).sort({ hour: -1 }).exec((err, docs) => {
-      if (err) { reject(err) } else { resolve(docs) }
-    })
-  })
-}
-let getColor = _ => {
-  return new Promise((resolve, reject) => {
-    db.find({ type: 'color' }).sort({ hour: -1 }).limit(1).exec((err, docs) => {
-      if (err) { reject(err) } else { resolve(docs) }
-    })
-  })
-}
-let removeColors = _ => {
-  db.remove({ type: 'color' }, { multi: true }, function (err, numRemoved) {
-    if (err) { console.log(err) }
-  })
+const getTodos = () => db.getState().todos
+
+const getColor = () => db.getState().color
+
+const addColor = color => db.set('color', color).write()
+
+const addTodos = todo =>
+  db
+    .get('todos')
+    .push(todo)
+    .write()
+
+const updateTodo = todo => {
+  db.get('todos')
+    .find({ name: todo.name })
+    .assign(todo)
+    .write()
 }
 
-let setCompleted = (todo) => {
-  db.update({'name': todo.name}, { $set: {'completed': todo.completed} }, (err, docs) => {
-    if (err) { console.error(err) }
-  })
-}
+const deleteTodos = todo =>
+  db
+    .get('todos')
+    .remove(todo)
+    .write()
 
-let isTodo = (date) => {
-  return new Promise((resolve, reject) => {
-    db.find({ date: new RegExp(date) }).exec((err, docs) => {
-      if (err) { reject(err) } else { resolve(docs) }
-    })
-  })
-}
+const setAllCompleted = _ =>
+  db
+    .get('posts')
+    .find({ completed: false })
+    .assign({ completed: true })
+    .write()
 
-let setAllCompleted = _ => {
-  db.update({}, { $set: { completed: true } }, { multi: true }, (err, docs) => {
-    if (err) { console.error(err) }
-  })
-}
-
-let updateTodo = (id, name, hour) => {
-  db.update({_id: id}, {$set: {name: name}}, (err, docs) => {
-    if (err) { console.error(err) }
-  })
-}
-
-let addTodos = (name, hour, date) => {
-  db.insert({
-    completed: false,
-    name: name,
-    hour: hour,
-    date: date
-  }, function (err, newDoc) {
-    if (err) { console.log(err) }
-  })
-}
-let addColor = (color, hour) => {
-  db.update({ type: 'color' }, { type: 'color', color: color, hour: hour }, { upsert: true }, function (err, numReplaced, upsert) {
-    if (err) { console.log(err) }
-  })
-}
-
-let deleteTodos = (todo) => {
-  db.remove({ name: todo.name }, { multi: false }, function (err, numRemoved) {
-    if (err) { console.log(err) }
-  })
-}
-
-let deleteCompleted = _ => {
-  db.remove({ completed: true }, { multi: true }, function (err, numRemoved) {
-    if (err) { console.log(err) }
-  })
+const deleteCompleted = _ => {
+  db.get('todos')
+    .remove({ completed: true })
+    .write()
 }
 export {
   removeColors,
@@ -84,5 +48,5 @@ export {
   setAllCompleted,
   addTodos,
   deleteTodos,
-  deleteCompleted
+  deleteCompleted,
 }
