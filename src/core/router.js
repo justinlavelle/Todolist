@@ -7,11 +7,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: require('@/components/MyComponent')
+      component: require('@components/MyComponent'),
     },
     {
       path: '*',
-      redirect: '/'
-    }
-  ]
+      redirect: '/',
+    },
+  ],
 })

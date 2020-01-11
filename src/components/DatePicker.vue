@@ -19,20 +19,22 @@
       <div v-for="(day, index) in days" :key="index" class="weekdays">
         {{ day }}
       </div>
-      <div
-        class="spacer"
-        :style="{ width: month.getWeekStart() * 51 + 'px' }"
-      />
-      <div
-        v-for="(day, index) in month.getDays()"
-        :key="`day${index}`"
-        class="day"
-        :class="{ selected: isSelected(day) }"
-        @click="selectDate(day)"
-      >
-        <span class="overlay" :style="{ background: colors.hex }"></span>
-        <span v-if="dayHasTodos(day)" class="taskedOverlay" />
-        <span class="text">{{ day.format('D') }}</span>
+      <div class="daysWrapper">
+        <div
+          class="spacer"
+          :style="{ width: month.getWeekStart() * 52 + 'px' }"
+        />
+        <div
+          v-for="(day, index) in month.getDays()"
+          :key="`day${index}`"
+          class="day"
+          :class="{ selected: isSelected(day) }"
+          @click="selectDate(day)"
+        >
+          <span class="overlay" :style="{ background: colors.hex }"></span>
+          <span v-if="dayHasTodos(day)" class="taskedOverlay" />
+          <span class="text">{{ day.format('D') }}</span>
+        </div>
       </div>
       <div class="buttons">
         <button
@@ -59,9 +61,9 @@
 </template>
 
 <script>
-import Month from './month.js'
-import Next from '@/assets/next.svg'
-import Previous from '@/assets/previous.svg'
+import Month from '@core/month.js'
+import Next from '@assets/next.svg'
+import Previous from '@assets/previous.svg'
 
 export default {
   components: {
@@ -132,6 +134,10 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.daysWrapper
+  display: inline-flex
+  flex-wrap: wrap
+
 .agenda
   background: white
   position: absolute
@@ -178,6 +184,7 @@ export default {
         fill: rgba(black, 0.2)
         vertical-align: middle
       label
+        white-space: nowrap
         flex: 2
         color: #757575
     .weekdays

@@ -1,10 +1,10 @@
-import db from '../datastore'
-
-const getTodos = () => db.getState().todos
+import db from './datastore'
 
 const getColor = () => db.getState().color
 
 const addColor = color => db.set('color', color).write()
+
+const getTodos = () => db.getState().todos
 
 const addTodos = todo =>
   db
@@ -12,12 +12,12 @@ const addTodos = todo =>
     .push(todo)
     .write()
 
-const updateTodo = todo => {
-  db.get('todos')
+const updateTodo = todo =>
+  db
+    .get('todos')
     .find({ name: todo.name })
     .assign(todo)
     .write()
-}
 
 const deleteTodos = todo =>
   db
@@ -27,7 +27,7 @@ const deleteTodos = todo =>
 
 const setAllCompleted = _ =>
   db
-    .get('posts')
+    .get('todos')
     .find({ completed: false })
     .assign({ completed: true })
     .write()
@@ -37,16 +37,14 @@ const deleteCompleted = _ => {
     .remove({ completed: true })
     .write()
 }
+
 export {
-  removeColors,
   getColor,
   addColor,
   getTodos,
-  isTodo,
-  updateTodo,
-  setCompleted,
-  setAllCompleted,
   addTodos,
+  updateTodo,
   deleteTodos,
+  setAllCompleted,
   deleteCompleted,
 }
