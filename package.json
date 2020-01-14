@@ -13,7 +13,7 @@
     "productName": "Todolist",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
-      "output": "build"
+      "output": "public"
     },
     "files": [
       "dist/electron/**/*"
