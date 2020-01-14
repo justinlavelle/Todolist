@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 
-let mainWindow
 const winURL = `file://${__dirname}/index.html`
+let mainWindow
 
 function createWindow() {
   /**
