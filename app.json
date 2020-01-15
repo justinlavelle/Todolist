@@ -1,0 +1,11 @@
+{
+  "name": "foo",
+  "description": "bar",
+  "keywords": ["productivity", "HTML5", "scalpel"],
+  "website": "https://small-sharp-tool.com/",
+  "repository": "https://github.com/jane-doe/small-sharp-tool",
+  "success_url": "/welcome",
+  "scripts": {
+    "postdeploy": "bundle exec rake bootstrap"
+  }
+}
