@@ -1,1 +1,1 @@
-release: pip install awscli
+release: node ./uploader.js
