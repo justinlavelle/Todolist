@@ -7,7 +7,7 @@
   "main": "dist/electron/main.js",
   "scripts": {
     "start": "NODE_ENV=development concurrently -p \"{name}\" -n \"🚋 Webpack,🔌 Electron\" -c \"green.bold,yellow.bold\" \"webpack-dev-server --config=./config/dev/webpack.config.js --mode development\" \"sleep 2 && electron ./src/main.js\"",
-    "build": "node config/prod/build.js && electron-builder --prepackaged ./public"
+    "build": "node config/prod/build.js && electron-builder --mac --prepackaged ./public"
   },
   "build": {
     "productName": "Todolist",
