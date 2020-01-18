@@ -24,7 +24,7 @@ jobs:
         uses: samuelmeuli/action-electron-builder@v1.2.0
         with:
           # GitHub authentication token
-          github_token: 6e08e7b2b00992b4b46ce6d678a97134687178ea
+          github_token: ${{ secrets.github_token }}
           # Base64-encoded code signing certificate for macOS
           # mac_certs: # optional
           # Password for decrypting `mac_certs`
