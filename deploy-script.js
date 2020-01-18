@@ -2,7 +2,21 @@ const semver = require('semver')
 const readPkg = require('read-pkg')
 const writePkg = require('write-pkg')
 const { exec: childExec } = require('child_process')
-const git = require('simple-git/promise')(process.cwd())
+const git = require('simple-git')(process.cwd())
+  .addConfig('user.name', 'Alexandre Charlot')
+  .addConfig('user.email', 'acharlot91@gmail.com')
+
+const CHANGELOG_ORDER = [
+  'feat',
+  'fix',
+  'perf',
+  'test',
+  'refactor',
+  'chore',
+  'docs',
+  'revert',
+  'other',
+]
 
 function bump(previousVersion = '0.0.0', commits = {}) {
   const hasFeat = commits.feat && commits.feat.length > 0
@@ -114,7 +128,7 @@ async function getCommits({ ...params } = {}) {
       let type = commitMessage.substring(0, commitMessage.indexOf('('))
       type = type === 'prefeat' ? 'feat' : type
 
-      if (!changelogUtils.CHANGELOG_ORDER.includes(type)) {
+      if (!CHANGELOG_ORDER.includes(type)) {
         type = 'other'
       }
 
