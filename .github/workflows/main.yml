@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: Electron Builder Action
+        uses: samuelmeuli/action-electron-builder@v1.2.0
+        with:
+          # GitHub authentication token
+          github_token: 6e08e7b2b00992b4b46ce6d678a97134687178ea
+          # Base64-encoded code signing certificate for macOS
+          # mac_certs: # optional
+          # Password for decrypting `mac_certs`
+          # mac_certs_password: # optional
+          # Whether the app should be released after a successful build
+          # release: # optional
+          # Base64-encoded code signing certificate for Windows
+          # windows_certs: # optional
+          # Password for decrypting `windows_certs`
+          # windows_certs_password: # optional
+          # Directory where NPM/Yarn commands should be run
+          # package_root: # optional, default is .
+          # Directory where `electron-builder` commands should be run
+          # app_root: # optional
