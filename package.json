@@ -1,7 +1,10 @@
 {
   "name": "todolist",
-  "version": "1.0.0",
-  "author": "blaadje <acharlot91@gmail.com>",
+  "version": "1.0.1",
+  "author": {
+    "name": "blaadje",
+    "email": "acharlot91@gmail.com"
+  },
   "description": "Be productive quickly",
   "license": "MIT",
   "main": "dist/electron/main.js",
@@ -51,10 +54,13 @@
     "lowdb": "^1.0.0",
     "moment": "^2.18.1",
     "moment-range": "^3.0.3",
+    "read-pkg": "^5.2.0",
+    "simple-git": "^1.129.0",
     "vue": "^2.3.3",
     "vue-color": "^2.3.2",
     "vue-electron": "^1.0.6",
-    "vue-router": "^2.5.3"
+    "vue-router": "^2.5.3",
+    "write-pkg": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
@@ -85,5 +91,6 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
-  }
+  },
+  "readme": "ERROR: No README data found!"
 }
