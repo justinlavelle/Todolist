@@ -1,6 +1,6 @@
 {
   "name": "todolist",
-  "version": "1.0.31",
+  "version": "1.0.0",
   "author": {
     "name": "blaadje",
     "email": "acharlot91@gmail.com"
@@ -17,7 +17,7 @@
   },
   "build": {
     "productName": "Todolist",
-    "appId": "org.simulatedgreg.electron-vue",
+    "appId": "io.blaadje.todo-list",
     "directories": {
       "output": "public"
     },
