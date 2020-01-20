@@ -1,9 +1,9 @@
-name: CI
+name: Deploy
 
 on:
   push:
     tags:
-     - v1.* 
+      - v1.* 
 
 jobs:
   release:
