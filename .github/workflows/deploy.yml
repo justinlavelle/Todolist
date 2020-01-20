@@ -1,11 +1,19 @@
 name: Deploy
 
-on:
-  release:
-    types: [published]
+on: 
+  push:
+    branches: 
+      - master
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: blaadje/github-package-version-bumper@master
+      with:
+        github-token: ${{ secrets.github_token }}
   deploy:
+    needs: [build]
     runs-on: ${{ matrix.os }}
 
     strategy:
