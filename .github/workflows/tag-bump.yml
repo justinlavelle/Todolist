@@ -1,4 +1,4 @@
-name: CI
+name: tag-bump
 
 on: 
   push:
