@@ -33,8 +33,6 @@ jobs:
           # triggered a workflow, this defaults to the reference or SHA for that event.
           # Otherwise, defaults to `master`.
           ref: 'refs/heads/master'
-      - run: git fetch --prune --unshallow
-      - run: git checkout HEAD^
       - run: cat package.json
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
