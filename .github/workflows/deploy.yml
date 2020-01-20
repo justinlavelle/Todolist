@@ -32,7 +32,7 @@ jobs:
           # The branch, tag or SHA to checkout. When checking out the repository that
           # triggered a workflow, this defaults to the reference or SHA for that event.
           # Otherwise, defaults to `master`.
-          ref: 'refs/remotes/origin/master'
+          ref: 'refs/heads/master'
       - run: git fetch --prune --unshallow
       - run: git checkout HEAD^
       - run: cat package.json
