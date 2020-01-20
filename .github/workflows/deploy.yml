@@ -24,7 +24,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+        with:
+          fetch-depth: 2
+      - run: git checkout HEAD^
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
