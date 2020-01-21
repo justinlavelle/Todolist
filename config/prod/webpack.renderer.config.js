@@ -1,6 +1,5 @@
 const path = require('path')
 const { dependencies } = require('../../package.json')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const config = require('../webpack.base')
 
 let rendererConfig = {
@@ -11,27 +10,14 @@ let rendererConfig = {
   },
   externals: [...Object.keys(dependencies || {})],
   node: {
-    __dirname: process.env.NODE_ENV !== 'production',
-    __filename: process.env.NODE_ENV !== 'production',
+    __dirname: false,
+    __filename: false,
   },
   output: {
-    filename: '[name].js',
+    filename: 'index.js',
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '../../dist/electron'),
   },
-  plugins: [
-    ...config.plugins,
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, '../../src/index.html'),
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true,
-      },
-      nodeModules: false,
-    }),
-  ],
   target: 'electron-renderer',
 }
 

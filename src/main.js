@@ -1,9 +1,13 @@
 const { app, BrowserWindow } = require('electron')
 
-const winURL = `file://${__dirname}/index.html`
 let mainWindow
+const port = process.env.PORT || 8080
 
 function createWindow() {
+  const winURL =
+    process.env.NODE_ENV === 'production'
+      ? `file://${__dirname}/index.html`
+      : `http://localhost:${port}/dist`
   /**
    * Initial window options
    */
@@ -12,6 +16,11 @@ function createWindow() {
     titleBarStyle: 'hidden-inset',
     height: 800,
     width: 550,
+    frame: false,
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: true,
+    },
   })
 
   mainWindow.loadURL(winURL)
