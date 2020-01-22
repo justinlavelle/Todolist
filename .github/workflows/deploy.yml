@@ -3,7 +3,7 @@ name: Deploy
 on: 
   push:
     branches: 
-      - master
+      - prod
 
 jobs:
   build:
@@ -25,19 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # Repository name with owner. For example, actions/checkout
-          # Default: ${{ github.repository }}
-          repository: ''
-
-          # The branch, tag or SHA to checkout. When checking out the repository that
-          # triggered a workflow, this defaults to the reference or SHA for that event.
-          # Otherwise, defaults to `master`.
           ref: 'refs/heads/master'
-      - run: cat package.json
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: install
         run: yarn install
 
