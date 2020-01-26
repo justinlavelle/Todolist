@@ -1,7 +1,9 @@
 name: Deploy
 
 on:
-  deployment
+  push:
+    branches: 
+      - foo
 
 jobs:
   build:
