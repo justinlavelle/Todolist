@@ -1,9 +1,7 @@
 name: Deploy
 
 on:
-  push:
-    branches: 
-      - foo
+  deployment
 
 jobs:
   build:
@@ -54,3 +52,9 @@ jobs:
           # package_root: # optional, default is .
           # Directory where `electron-builder` commands should be run
           # app_root: # optional
+      - name: update deploy status
+        if: always()
+        uses: unacast/actions-github-deployment-status@0.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
