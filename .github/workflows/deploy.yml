@@ -23,40 +23,36 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: git pull
-      - run: git log
-        #with:
-          #ref: 'refs/heads/master'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-#       - name: Use Node.js ${{ matrix.node-version }}
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: ${{ matrix.node-version }}
+      - name: install
+        run: yarn install
 
-#       - name: install
-#         run: yarn install
-#
-#       - name: Electron Builder Action
-#         uses: samuelmeuli/action-electron-builder@v1.2.0
-#         with:
-#           # GitHub authentication token
-#           github_token: ${{ secrets.github_token }}
-#           # Base64-encoded code signing certificate for macOS
-#           # mac_certs: # optional
-#           # Password for decrypting `mac_certs`
-#           # mac_certs_password: # optional
-#           # Whether the app should be released after a successful build
-#           release: true
-#           # Base64-encoded code signing certificate for Windows
-#           # windows_certs: # optional
-#           # Password for decrypting `windows_certs`
-#           # windows_certs_password: # optional
-#           # Directory where NPM/Yarn commands should be run
-#           # package_root: # optional, default is .
-#           # Directory where `electron-builder` commands should be run
-#           # app_root: # optional
-#       - name: update deploy status
-#         if: always()
-#         uses: unacast/actions-github-deployment-status@0.2
-#         with:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
-#           status: ${{ job.status }}
+      - name: Electron Builder Action
+        uses: samuelmeuli/action-electron-builder@v1.2.0
+        with:
+          # GitHub authentication token
+          github_token: ${{ secrets.github_token }}
+          # Base64-encoded code signing certificate for macOS
+          # mac_certs: # optional
+          # Password for decrypting `mac_certs`
+          # mac_certs_password: # optional
+          # Whether the app should be released after a successful build
+          release: true
+          # Base64-encoded code signing certificate for Windows
+          # windows_certs: # optional
+          # Password for decrypting `windows_certs`
+          # windows_certs_password: # optional
+          # Directory where NPM/Yarn commands should be run
+          # package_root: # optional, default is .
+          # Directory where `electron-builder` commands should be run
+          # app_root: # optional
+      - name: update deploy status
+        if: always()
+        uses: unacast/actions-github-deployment-status@0.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
