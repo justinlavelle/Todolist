@@ -59,4 +59,4 @@ jobs:
         uses: unacast/actions-github-deployment-status@0.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ jobs.deploy.status }}
+          status: ${{ job.status }}
