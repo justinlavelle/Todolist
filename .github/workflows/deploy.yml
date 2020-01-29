@@ -53,9 +53,12 @@ jobs:
           # package_root: # optional, default is .
           # Directory where `electron-builder` commands should be run
           # app_root: # optional
+  set-deploy-status:
+    runs-on: ubuntu-latest
+    steps:
       - name: update deploy status
         if: always()
         uses: unacast/actions-github-deployment-status@0.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}
+          status: ${{ jobs.deploy.status }}
