@@ -10,6 +10,7 @@ jobs:
     - uses: blaadje/github-package-version-bumper@master
       with:
         github-token: ${{ secrets.github_token }}
+
   deploy:
     needs: [build]
     runs-on: ${{ matrix.os }}
@@ -23,11 +24,14 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - shell: bash
-      - run: |
+
+      - name: Fetch commits
+        shell: bash
+        run: |
           if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]]; then
           git pull;
           fi;
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -55,6 +59,7 @@ jobs:
           # package_root: # optional, default is .
           # Directory where `electron-builder` commands should be run
           # app_root: # optional
+
       - name: Update deploy status
         if: always()
         uses: unacast/actions-github-deployment-status@0.2
