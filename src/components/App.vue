@@ -169,7 +169,7 @@ export default {
     return {
       todos: [],
       colors: database.getColor() || {
-        hex: '#5CBCE9',
+        hex: '#2d2342',
         rgb: {
           r: 44,
           g: 190,
