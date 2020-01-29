@@ -25,7 +25,6 @@ jobs:
       - run: |
           if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]]; then
           git pull;
-          exit 1; 
           fi;
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
