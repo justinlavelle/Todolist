@@ -169,7 +169,7 @@ export default {
     return {
       todos: [],
       colors: {
-        hex: '#884f65',
+        hex: '#5CBCE9',
         rgb: {
           r: 44,
           g: 190,
