@@ -28,9 +28,11 @@ jobs:
       - name: Fetch commits
         shell: bash
         run: |
-          if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]]; then
-          git pull;
+          if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]];
+          then git pull;
+          else git checkout master -- package.json; 
           fi;
+
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
