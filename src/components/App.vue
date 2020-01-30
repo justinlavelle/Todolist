@@ -2,6 +2,7 @@
   <section>
     <header :style="{ background: colors.hex }">
       <div class="datepicker">
+        bonjour
         <span class="dateFormatted">
           {{ selectedDate.format('YYYY-MM-DD') }}
         </span>
@@ -169,7 +170,7 @@ export default {
     return {
       todos: [],
       colors: database.getColor() || {
-        hex: '#884f65',
+        hex: '#5CBCE9',
         rgb: {
           r: 44,
           g: 190,
