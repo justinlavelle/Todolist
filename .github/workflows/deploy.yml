@@ -32,7 +32,7 @@ jobs:
           then git pull;
           else  
           git fetch;
-          git checkout refs/heads/master -- package.json;
+          git checkout origin/master -- package.json;
           fi;
 
 
