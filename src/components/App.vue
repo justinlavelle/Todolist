@@ -168,7 +168,7 @@ export default {
   data() {
     return {
       todos: [],
-      colors: {
+      colors: database.getColor() || {
         hex: '#5CBCE9',
         rgb: {
           r: 44,
