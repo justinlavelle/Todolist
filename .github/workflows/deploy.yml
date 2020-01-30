@@ -30,7 +30,7 @@ jobs:
         run: |
           if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]];
           then git pull;
-          else git checkout origin/master -- package.json; 
+          else git checkout refs/heads/master -- package.json; 
           fi;
 
 
