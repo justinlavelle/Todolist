@@ -43,6 +43,12 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
+        
+      - name: 'deployment pending'
+        uses: 'deliverybot/deployment-status@v1'
+        with:
+          state: 'pending'
+          token: '${{ github.token }}'
 
       - name: Electron Builder Action
         uses: samuelmeuli/action-electron-builder@v1.2.0
@@ -64,9 +70,16 @@ jobs:
           # Directory where `electron-builder` commands should be run
           # app_root: # optional
 
-      - name: Update deploy status
-        if: always()
-        uses: unacast/actions-github-deployment-status@0.2
+      - name: 'deployment success'
+        if: success()
+        uses: 'deliverybot/deployment-status@v1'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}
+          state: 'success'
+          token: '${{ github.token }}'
+
+      - name: 'deployment failure'
+        if: failure()
+        uses: 'deliverybot/deployment-status@v1'
+        with:
+          state: 'failure'
+          token: '${{ github.token }}'
