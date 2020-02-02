@@ -2,7 +2,6 @@
   <section>
     <header :style="{ background: colors.hex }">
       <div class="datepicker">
-        bonjour
         <span class="dateFormatted">
           {{ selectedDate.format('YYYY-MM-DD') }}
         </span>
