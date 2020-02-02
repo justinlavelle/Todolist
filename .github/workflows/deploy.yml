@@ -7,6 +7,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: 'deployment pending'
+      uses: 'deliverybot/deployment-status@v1'
+      with:
+        state: 'pending'
+        token: '${{ github.token }}'
     - uses: blaadje/github-package-version-bumper@master
       with:
         github-token: ${{ secrets.github_token }}
@@ -43,12 +48,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        
-      - name: 'deployment pending'
-        uses: 'deliverybot/deployment-status@v1'
-        with:
-          state: 'pending'
-          token: '${{ github.token }}'
 
       - name: Electron Builder Action
         uses: samuelmeuli/action-electron-builder@v1.2.0
