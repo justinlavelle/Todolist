@@ -52,18 +52,17 @@ module.exports = {
         },
       },
       {
-        test: /\.sass$/,
+        test: /\.scss$/,
         use: [
           'vue-style-loader',
-          'css-loader',
           {
-            loader: 'sass-loader',
+            loader: 'css-loader',
             options: {
-              sassOptions: {
-                indentedSyntax: true,
-              },
+              modules: true,
+              localIdentName: '[local]_[hash:base64:5]',
             },
           },
+          'sass-loader',
         ],
       },
       {

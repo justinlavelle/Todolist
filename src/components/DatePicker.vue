@@ -1,48 +1,51 @@
 <template>
-  <div class="agenda">
+  <div :class="$style.agenda">
     <div
-      class="triangle"
+      :class="$style.triangle"
       :style="{
         borderColor: `transparent transparent ${colors.hex} transparent`,
       }"
     />
-    <div class="header" :style="{ background: colors.hex }">
-      <span class="year">{{ selectedDate.format('YYYY') }}</span>
-      <span class="date">{{ selectedDate.format('dddd DD MMM') }}</span>
+    <div :class="$style.header" :style="{ background: colors.hex }">
+      <span :class="$style.year">{{ selectedDate.format('YYYY') }}</span>
+      <span :class="$style.date">{{ selectedDate.format('dddd DD MMM') }}</span>
     </div>
-    <div class="days">
-      <div class="controls">
-        <Next class="arrows" @click="prevMonth()" />
+    <div :class="$style.days">
+      <div :class="$style.controls">
+        <Next :class="$style.arrows" @click="prevMonth()" />
         <label>{{ month.getFormatted() }}</label>
-        <Previous class="arrows" @click="nextMonth()" />
+        <Previous :class="$style.arrows" @click="nextMonth()" />
       </div>
-      <div v-for="(day, index) in days" :key="index" class="weekdays">
+      <div v-for="(day, index) in days" :key="index" :class="$style.weekdays">
         {{ day }}
       </div>
-      <div class="daysWrapper">
+      <div :class="$style.daysWrapper">
         <div
-          class="spacer"
+          :class="$style.spacer"
           :style="{ width: month.getWeekStart() * 52 + 'px' }"
         />
         <div
           v-for="(day, index) in month.getDays()"
           :key="`day${index}`"
-          class="day"
-          :class="{ selected: isSelected(day) }"
+          :class="[$style.day, { [$style.selected]: isSelected(day) }]"
           @click="selectDate(day)"
         >
-          <span class="overlay" :style="{ background: colors.hex }"></span>
-          <span v-if="dayHasTodos(day)" class="taskedOverlay" />
-          <span class="text">{{ day.format('D') }}</span>
+          <span
+            :class="$style.overlay"
+            :style="{ background: colors.hex }"
+          ></span>
+          <span v-if="dayHasTodos(day)" :class="$style.taskedOverlay" />
+          <span v-if="isToday(day)" :class="$style.todayOverlay" />
+          <span :class="$style.text">{{ day.format('D') }}</span>
         </div>
       </div>
-      <div class="buttons">
+      <div :class="$style.buttons">
         <button
           :style="{
             background: colors.hex,
             border: '1px solid' + colors.hex,
           }"
-          @click="$emit('selectedDate', localSelectedDate)"
+          @click="$emit('close')"
         >
           Ok
         </button>
@@ -51,7 +54,7 @@
             background: colors.hex,
             border: '1px solid' + colors.hex,
           }"
-          @click="$emit('cancel')"
+          @click="$emit('close')"
         >
           Cancel
         </button>
@@ -64,6 +67,7 @@
 import Month from '@core/month.js'
 import Next from '@assets/next.svg'
 import Previous from '@assets/previous.svg'
+import moment from 'moment'
 
 export default {
   components: {
@@ -94,6 +98,9 @@ export default {
   methods: {
     dayHasTodos(day) {
       return this.taskedDays.some(item => item === day.format('YYYY-MM-DD'))
+    },
+    isToday(day) {
+      return moment().format('YYYY-MM-DD') === day.format('YYYY-MM-DD')
     },
     nextMonth() {
       let month = this.month.month + 1
@@ -128,132 +135,182 @@ export default {
     },
     selectDate(day) {
       this.localSelectedDate = day
+      this.$emit('selectedDate', day)
     },
   },
 }
 </script>
 
-<style lang="sass" scoped>
-.daysWrapper
-  display: inline-flex
-  flex-wrap: wrap
+<style lang="scss" module>
+.daysWrapper {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
 
-.agenda
-  background: white
-  position: absolute
-  box-shadow: 2px 6px 8px 3px rgba(black, 0.1)
-  top: 130px
-  width: 392px
-  left: 0
-  right: 0
-  margin: auto
-  z-index: 2
-  .triangle
-    content: ''
-    position: absolute
-    top: -17px
-    left: 0
-    right: 0
-    margin: auto
-    width: 0
-    height: 0
-    border-style: solid
-    border-width: 0 17.5px 17px 17.5px
-  .header
-    color: white
-    padding: 1.5em
-    .year
-      display: block
-      opacity: 0.7
-    .date
-      font-size: 1.5em
-  .days
-    width: 392px
-    padding: 0 14px 14px 14px
-    .controls
-      position: relative
-      display: flex
-      align-items: center
-      height: 56px
-      justify-content: center
-      line-height: 56px
-      .arrows
-        flex: 2
-        width: 24px
-        height: 24px
-        fill: rgba(black, 0.2)
-        vertical-align: middle
-      label
-        white-space: nowrap
-        flex: 2
-        color: #757575
-    .weekdays
-      border-bottom: 1px solid #c2c2c2
-      text-align: center
-      color: #757575
-      padding: 14px
-      width: 52px
-      display: inline-block
-    .spacer
-      height: 52px
-      vertical-align: top
-      text-align: center
-      display: inline-block
-    .day
-      display: inline-flex
-      align-items: center
-      justify-content: center
-      position: relative
-      cursor: pointer
-      height: 52px
-      width: 52px
-      &.selected
-        .text
-          color: white
-        .overlay
-          opacity: 1
-          transform: scale(1)
-      &:hover
-        .text
-          color: white
-        .overlay
-          transform: scale(1)
-          opacity: 0.6
-      .overlay
-        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
-        position: absolute
-        transform: scale(0)
-        opacity: 0
-        z-index: 0
-        top: 0
-        left: 0
-        height: 100%
-        width: 100%
-        border-radius: 50%
-      .taskedOverlay
-        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
-        position: absolute
-        z-index: -1
-        box-shadow: 0px 0px 0px 1px #c2c2c2
-        top: 0
-        left: 0
-        height: 100%
-        width: 100%
-        border-radius: 50%
-      .text
-        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1)
-        position: relative
-        color: #757575
-  .buttons
-    text-align: right
-    button
-      background: #55C9FF
-      cursor: pointer
-      outline: none
-      border: 1px solid #55C9FF
-      padding: .6em 1em
-      border-radius: .2em
-      margin-left: 1em
-      color: white
-      text-transform: uppercase
+.agenda {
+  background: rgba(white, 0.8);
+  position: absolute;
+  box-shadow: 2px 6px 8px 3px rgba(0, 0, 0, 0.1);
+  top: 130px;
+  width: 392px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 2;
+}
+
+.agenda .triangle {
+  content: '';
+  position: absolute;
+  top: -17px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 17.5px 17px 17.5px;
+}
+
+.agenda .header {
+  color: white;
+  padding: 1.5em;
+}
+
+.agenda .header .year {
+  display: block;
+  opacity: 0.7;
+}
+
+.agenda .header .date {
+  font-size: 1.5em;
+}
+
+.agenda .days {
+  width: 392px;
+  padding: 0 14px 14px 14px;
+}
+
+.agenda .days .controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  justify-content: center;
+  line-height: 56px;
+}
+
+.agenda .days .controls .arrows {
+  flex: 2;
+  width: 24px;
+  height: 24px;
+  fill: rgba(0, 0, 0, 0.2);
+  vertical-align: middle;
+}
+
+.agenda .days .controls label {
+  white-space: nowrap;
+  flex: 2;
+  color: #757575;
+}
+
+.agenda .days .weekdays {
+  border-bottom: 1px solid #c2c2c2;
+  text-align: center;
+  color: #757575;
+  padding: 14px;
+  width: 52px;
+  display: inline-block;
+}
+
+.agenda .days .spacer {
+  height: 52px;
+  vertical-align: top;
+  text-align: center;
+  display: inline-block;
+}
+
+.agenda .days .day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  height: 52px;
+  width: 52px;
+}
+
+.agenda .days .day.selected .text {
+  color: white;
+}
+
+.agenda .days .day.selected .overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.agenda .days .day:hover .text {
+  color: white;
+}
+
+.agenda .days .day:hover .overlay {
+  transform: scale(1);
+  opacity: 0.6;
+}
+
+.agenda .days .day .overlay {
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
+  position: absolute;
+  transform: scale(0);
+  opacity: 0;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+
+.agenda .days .day .taskedOverlay {
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
+  position: absolute;
+  z-index: -1;
+  box-shadow: 0px 0px 0px 1px #c2c2c2;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+
+.todayOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #c2c2c2;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+
+.agenda .days .day .text {
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  color: #757575;
+}
+
+.agenda .buttons {
+  text-align: right;
+}
+
+.agenda .buttons button {
+  cursor: pointer;
+  outline: none;
+  padding: 0.6em 1em;
+  border-radius: 0.2em;
+  margin-left: 1em;
+  color: white;
+  text-transform: uppercase;
+}
 </style>
