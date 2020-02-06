@@ -114,6 +114,7 @@ export default {
   position: fixed;
   padding: 0;
   z-index: 2;
+  -webkit-app-region: drag;
 }
 
 .icons {
