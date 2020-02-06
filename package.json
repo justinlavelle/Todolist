@@ -12,9 +12,6 @@
     "start": "NODE_ENV=development concurrently -p \"{name}\" -n \"🚋 Webpack,🔌 Electron\" -c \"green.bold,yellow.bold\" \"webpack-dev-server --config=./config/dev/webpack.config.js --mode development\" \"sleep 2 && electron ./src/main.js\"",
     "build": "node config/prod/build.js"
   },
-  "engines": {
-    "node": "~12.14.x"
-  },
   "build": {
     "productName": "Todolist",
     "appId": "io.blaadje.todo-list",
