@@ -13,10 +13,16 @@
       <h2 v-if="filteredTodos.length === 0">
         There's no task
       </h2>
-      <ul>
+      <TransitionGroup
+        v-if="filteredTodos.length"
+        tag="ul"
+        :appear="false"
+        :enter-class="$style.transitionEnter"
+        :enter-active-class="$style.transitionEnterActive"
+      >
         <li
           v-for="(todo, index) in filteredTodos"
-          :key="index"
+          :key="todo.date"
           :class="[
             $style.todo,
             {
@@ -63,7 +69,7 @@
             @blur="editing = false"
           />
         </li>
-      </ul>
+      </TransitionGroup>
     </div>
     <Footer
       :remaining="remaining"
@@ -384,5 +390,14 @@ li {
 .slideUp-enter-to {
   opacity: 1;
   transform: translateY(0);
+}
+
+.transitionEnterActive {
+  transition: transform 0.5s cubic-bezier(0, 0.54, 0.5, 1);
+  transform: translateX(0);
+}
+
+.transitionEnter {
+  transform: translateX(-400px);
 }
 </style>
