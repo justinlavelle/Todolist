@@ -164,6 +164,7 @@ export default {
 
 .calendar,
 .picker {
+  -webkit-app-region: no-drag;
   width: 20px;
   height: 20px;
   fill: black;
@@ -211,6 +212,7 @@ export default {
 }
 
 .newTodo {
+  -webkit-app-region: no-drag;
   border: none;
   font-size: 1.5em;
   font-weight: 200;
