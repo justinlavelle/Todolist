@@ -1,3 +1,4 @@
+const Dotenv = require('dotenv-webpack')
 const path = require('path')
 const { dependencies } = require('../../package.json')
 const config = require('../webpack.base')
@@ -5,6 +6,12 @@ const config = require('../webpack.base')
 let rendererConfig = {
   ...config,
   mode: 'production',
+  plugins: [
+    ...config.plugins,
+    new Dotenv({
+      systemvars: true,
+    }),
+  ],
   entry: {
     renderer: path.join(__dirname, '../../src/index.js'),
   },

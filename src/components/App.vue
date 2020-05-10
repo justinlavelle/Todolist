@@ -186,6 +186,7 @@ export default {
     },
   },
   mounted() {
+    console.log(process.env.GOOGLE_ANALYTICS_ID)
     this.todos = database.getTodos()
     const userId = database.getUserId()
 
