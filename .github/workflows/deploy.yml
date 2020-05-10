@@ -51,6 +51,8 @@ jobs:
 
       - name: Electron Builder Action
         uses: samuelmeuli/action-electron-builder@v1.2.0
+        env:
+          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
         with:
           # GitHub authentication token
           github_token: ${{ secrets.github_token }}
