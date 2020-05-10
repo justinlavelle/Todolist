@@ -47,9 +47,11 @@
     }
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "lowdb": "^1.0.0",
     "moment": "^2.18.1",
     "moment-range": "^3.0.3",
+    "universal-analytics": "^0.4.20",
     "vue": "^2.3.3",
     "vue-color": "^2.3.2",
     "vue-electron": "^1.0.6",

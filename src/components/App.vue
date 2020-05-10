@@ -22,7 +22,7 @@
       >
         <li
           v-for="(todo, index) in filteredTodos"
-          :key="todo.date"
+          :key="moment(todo.date).unix()"
           :class="[
             $style.todo,
             {
@@ -96,9 +96,14 @@ import Header from './Header'
 import Footer from './Footer'
 import RunningTask from '../assets/runningTask.svg'
 import CompletedTask from '../assets/completedTask.svg'
+import ua from 'universal-analytics'
 
 const DATE = 'date'
 const ALL = 'all'
+const CATEGORY_TASK = 'category-task'
+const ACTION_CREATE = 'action-create'
+const ACTION_DELETE = 'action-delete'
+const ACTION_EDIT = 'action-edit'
 
 export default {
   components: {
@@ -118,6 +123,7 @@ export default {
   },
   data() {
     return {
+      user: null,
       todos: [],
       colors: database.getColor() || {
         hex: '#5CBCE9',
@@ -181,8 +187,29 @@ export default {
   },
   mounted() {
     this.todos = database.getTodos()
+    const userId = database.getUserId()
+
+    if (!userId) {
+      const generateId = this.generateId()
+      this.user = ua(process.env.GOOGLE_ANALYTICS_ID, userId)
+      database.setUserId(generateId)
+      return
+    }
+    this.user = ua(process.env.GOOGLE_ANALYTICS_ID, userId)
   },
   methods: {
+    generateId() {
+      let d = moment().unix()
+
+      d += window.performance.now()
+
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = (d + Math.random() * 16) % 16 | 0
+        d = Math.floor(d / 16)
+
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
+      })
+    },
     setAllCompleted(allDone) {
       this.todos = this.todos.map(todo => ({
         ...todo,
@@ -201,6 +228,8 @@ export default {
       this.colors = color
     },
     createTodo(newTodo) {
+      this.user.event(CATEGORY_TASK, ACTION_CREATE).send()
+
       const todo = {
         name: newTodo,
         date: moment(),
@@ -210,10 +239,12 @@ export default {
       database.addTodos(todo)
     },
     deleteTodo(todo) {
+      this.user.event(CATEGORY_TASK, ACTION_DELETE).send()
       database.deleteTodos(todo)
       this.todos = this.todos.filter(item => item !== todo)
     },
     editTodo(todo) {
+      this.user.event(CATEGORY_TASK, ACTION_EDIT).send()
       this.editing = todo
     },
     completed(todo) {

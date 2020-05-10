@@ -8,6 +8,6 @@ const adapter = new FileSync(
 )
 const db = low(adapter)
 
-db.defaults({ todos: [], color: null }).write()
+db.defaults({ todos: [], color: null, userId: null }).write()
 
 export default db

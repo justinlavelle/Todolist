@@ -6,6 +6,10 @@ const addColor = color => db.set('color', color).write()
 
 const getTodos = () => db.getState().todos
 
+const getUserId = () => db.getState().userId
+
+const setUserId = userId => db.set('userId', userId).write()
+
 const addTodos = todo =>
   db
     .get('todos')
@@ -40,6 +44,8 @@ const deleteCompleted = _ => {
 
 export {
   getColor,
+  getUserId,
+  setUserId,
   addColor,
   getTodos,
   addTodos,

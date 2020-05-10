@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron')
+require('dotenv').config()
 
 let mainWindow
 const port = process.env.PORT || 8080
