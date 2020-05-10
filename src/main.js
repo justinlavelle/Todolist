@@ -1,7 +1,5 @@
 const { app, BrowserWindow } = require('electron')
 
-console.log('main', process.env)
-
 let mainWindow
 const port = process.env.PORT || 8080
 
