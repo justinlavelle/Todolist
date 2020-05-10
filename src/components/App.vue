@@ -282,7 +282,7 @@ section {
 
 .tasks {
   padding-top: 178px;
-  margin-bottom: 135px;
+  margin-bottom: 200px;
   position: relative;
   z-index: 1;
 }
