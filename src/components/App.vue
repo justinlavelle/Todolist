@@ -4,6 +4,7 @@
       :selectedDate="selectedDate"
       :colors="colors"
       :taskedDays="taskedDays"
+      :tags="tags"
       @saveColor="saveColor"
       @selectedDate="setDate"
       @selectedColor="setColor"
@@ -65,7 +66,14 @@
                 {{ todo.name }}
               </label>
             </div>
-            <button :class="$style.destroy" @click.prevent="deleteTodo(todo)" />
+            <span
+              :class="$style.tag"
+              :style="{ background: getTagColor(todo.tagId) }"
+            />
+            <CrossIcon
+              :class="$style.destroy"
+              @click.prevent="deleteTodo(todo)"
+            />
           </div>
           <input
             v-if="todo === editing"
@@ -80,17 +88,18 @@
       </TransitionGroup>
     </div>
     <Filters
-      v-if="filteredTodos.length !== 0"
       :remaining="remaining"
       :colors="colors"
+      :tags="tags"
       :todos="todos"
       :filter="filter"
       :status="status"
-      @filterByAll="filter = 'all'"
-      @filterByDate="filter = 'date'"
-      @statusByAll="status = 'all'"
-      @statusByTodo="status = 'todo'"
-      @statusByCompleted="status = 'completed'"
+      @filterByTag="handleFilterTag"
+      @filterByAll="handleFilterAll"
+      @filterByDate="handleFilterDate"
+      @statusByAll="handleStatusAll"
+      @statusByTodo="handleStatusTodo"
+      @statusByCompleted="handleStatusCompleted"
       @deleteCompleted="deleteCompleted"
     />
   </section>
@@ -106,6 +115,7 @@ import RunningTask from '../assets/runningTask.svg'
 import CompletedTask from '../assets/completedTask.svg'
 import AllCompletedIcon from '../assets/allcompleted.svg'
 import ua from 'universal-analytics'
+import CrossIcon from '@assets/cross.svg'
 
 const DATE = 'date'
 const ALL = 'all'
@@ -121,6 +131,7 @@ export default {
     RunningTask,
     CompletedTask,
     AllCompletedIcon,
+    CrossIcon,
   },
   directives: {
     focus(el, value) {
@@ -143,7 +154,17 @@ export default {
           b: 238,
         },
       },
+      tags: [
+        { color: '#FF675D', id: 0, name: null },
+        { color: '#F9A74D', id: 1, name: null },
+        { color: '#F5CE53', id: 2, name: null },
+        { color: '#72CC57', id: 3, name: null },
+        { color: '#57B9F4', id: 4, name: null },
+        { color: '#D289E2', id: 5, name: null },
+        { color: '#A5A5A7', id: 6, name: null },
+      ],
       selectedDate: moment(),
+      selectedTag: null,
       filter: DATE,
       status: ALL,
       editing: null,
@@ -167,17 +188,19 @@ export default {
       }
     },
     getTodos() {
-      const todos = this.todos.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-      )
-
-      return this.filter === DATE
-        ? todos.filter(
-            todo =>
-              moment(todo.date).format('YYYY-MM-DD') ===
-              this.selectedDate.format('YYYY-MM-DD'),
-          )
-        : todos
+      return this.todos
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .filter(todo =>
+          this.filter === DATE
+            ? moment(todo.date).format('YYYY-MM-DD') ===
+              this.selectedDate.format('YYYY-MM-DD')
+            : true,
+        )
+        .filter(todo =>
+          this.selectedTag
+            ? todo.tagId && todo.tagId === this.selectedTag.id
+            : true,
+        )
     },
     taskedDays() {
       return this.todos.reduce((acc, todo) => {
@@ -211,6 +234,29 @@ export default {
     this.user = ua(process.env.GOOGLE_ANALYTICS_ID, userId)
   },
   methods: {
+    getTagColor(tagId) {
+      const tags = this.tags.find(({ id }) => id === tagId)
+
+      return tags && tags.color
+    },
+    handleFilterTag(tag) {
+      this.selectedTag = tag
+    },
+    handleFilterAll() {
+      this.filter = 'all'
+    },
+    handleFilterDate() {
+      this.filter = 'date'
+    },
+    handleStatusAll() {
+      this.status = 'all'
+    },
+    handleStatusTodo() {
+      this.status = 'todo'
+    },
+    handleStatusCompleted() {
+      this.status = 'completed'
+    },
     generateId() {
       let d = moment().unix()
 
@@ -240,12 +286,13 @@ export default {
     setColor(color) {
       this.colors = color
     },
-    createTodo(newTodo) {
+    createTodo(newTodo, tagId) {
       this.user.event(CATEGORY_TASK, ACTION_CREATE).send()
 
       const todo = {
         name: newTodo,
         date: moment(),
+        tagId,
         completed: false,
       }
       this.todos = [...this.todos, todo]
@@ -381,6 +428,7 @@ ul {
 
 .view {
   display: flex;
+  align-items: center;
 }
 
 .textWrapper {
@@ -398,12 +446,22 @@ ul {
 
 .todo:hover {
   .destroy {
-    display: block;
+    fill: #ededed;
   }
 }
 
 .todo:not(:last-child) {
   border-bottom: 1px solid #ededed;
+}
+
+.tag {
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  margin: 0.3rem;
+  border-radius: 0.2rem;
+  display: block;
+  flex-shrink: 0;
 }
 
 .todo:first-child {
@@ -428,22 +486,12 @@ ul {
 }
 
 .destroy {
-  display: none;
+  margin-left: 1rem;
+  fill: white;
   background: transparent;
-  position: absolute;
-  border: none;
-  top: 0;
-  right: 10px;
-  bottom: 0;
-  outline: none;
+  height: 25px;
+  width: 25px;
   cursor: pointer;
-}
-
-.destroy::after {
-  font-size: 4em;
-  font-weight: 100;
-  content: '\d7';
-  color: #c2c2c2;
 }
 
 .dateFormatted {

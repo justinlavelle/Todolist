@@ -43,23 +43,42 @@
         </button>
       </div>
     </Transition>
-    <input
-      v-if="isInputAvailable"
-      v-model="newTodoName"
-      :class="$style.newTodo"
-      type="text"
-      placeholder="Create a task"
-      @keyup.enter="
-        () => {
-          if (!newTodoName) {
-            return
-          }
-
-          $emit('createTodo', newTodoName)
-          newTodoName = ''
-        }
-      "
-    />
+    <div :class="$style.inputWrapper">
+      <input
+        v-if="isInputAvailable"
+        v-model="newTodoName"
+        :class="$style.newTodo"
+        type="text"
+        placeholder="Create a task"
+        @keyup.enter="createTodo"
+      />
+      <div :class="$style.colorSelector">
+        <div :class="$style.topWrapper" @click="toggleColorsSelector">
+          <span
+            :class="[
+              $style.currentTag,
+              $style.tag,
+              { [$style.hasNoTag]: !selectedTag },
+            ]"
+            :style="{ background: selectedTag && selectedTag.color }"
+          />
+          <DownArrowIcon :class="$style.downArrowIcon" />
+        </div>
+        <div v-if="showColorsSelector" :class="$style.tagsWrapper">
+          <span
+            v-for="tag in tags"
+            :key="tag.id"
+            :class="$style.tag"
+            @click="setSelectedTag(tag)"
+            :style="{ background: tag.color }"
+          />
+          <span
+            :class="[$style.tag, $style.hasNoTag]"
+            @click="setSelectedTag()"
+          />
+        </div>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -69,6 +88,7 @@ import { Sketch } from 'vue-color'
 import ColorPickerIcon from '@assets/color-picker.svg'
 import CalendarIcon from '@assets/calendar.svg'
 import moment from 'moment'
+import DownArrowIcon from '@assets/downArrow.svg'
 
 export default {
   components: {
@@ -76,8 +96,13 @@ export default {
     Sketch,
     ColorPickerIcon,
     CalendarIcon,
+    DownArrowIcon,
   },
   props: {
+    tags: {
+      type: Array,
+      required: true,
+    },
     colors: {
       type: Object,
       required: true,
@@ -96,6 +121,8 @@ export default {
       newTodoName: '',
       colorPickerVisible: false,
       datePickerVisible: false,
+      showColorsSelector: false,
+      selectedTag: null,
     }
   },
   computed: {
@@ -106,6 +133,24 @@ export default {
     },
   },
   methods: {
+    createTodo() {
+      if (!this.newTodoName) {
+        return
+      }
+
+      this.$emit(
+        'createTodo',
+        this.newTodoName,
+        this.selectedTag && this.selectedTag.id,
+      )
+      this.newTodoName = ''
+    },
+    toggleColorsSelector() {
+      this.showColorsSelector = !this.showColorsSelector
+    },
+    setSelectedTag(tag) {
+      this.selectedTag = tag
+    },
     handleSketch(color) {
       return this.$emit('selectedColor', color)
     },
@@ -129,6 +174,59 @@ export default {
 
 .icons {
   flex: 5;
+}
+
+.hasNoTag {
+  border: 1px solid #ededed;
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 180%;
+    width: 1px;
+    background: red;
+    transform: rotate(45deg) translate(-50%, -50%);
+    transform-origin: 0% 0%;
+  }
+}
+
+.inputWrapper {
+  display: flex;
+  position: relative;
+}
+
+.tagsWrapper {
+  display: flex;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  flex-direction: column;
+  border-radius: 0.2rem;
+  align-items: center;
+  box-shadow: 0px 0px 19px rgba(0, 0, 0, 0.12);
+}
+
+.colorSelector {
+  position: absolute;
+  top: 25px;
+  border-radius: 0.2rem;
+  right: 20px;
+  background: white;
+}
+
+.downArrowIcon {
+  height: 15px;
+  width: 15px;
+  margin-left: 5px;
+}
+
+.topWrapper {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
 }
 
 .calendar {
@@ -157,6 +255,15 @@ export default {
   border-radius: 0.2em;
   color: white;
   text-transform: uppercase;
+}
+
+.tag {
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  margin: 0.3rem;
+  border-radius: 0.2rem;
+  display: block;
 }
 
 .pickerContent {

@@ -12,6 +12,19 @@
       </span>
       <div :class="$style.filtersWrapper">
         <div :class="$style.filters">
+          <div :class="$style.tagsWrapper">
+            <span
+              v-for="tag in tags"
+              :key="tag"
+              :class="$style.tag"
+              @click="$emit('filterByTag', tag)"
+              :style="{ background: tag.color }"
+            />
+            <span
+              :class="[$style.tag, $style.hasNoTag]"
+              @click="$emit('filterByTag')"
+            />
+          </div>
           <div :class="$style.filterWrapper">
             <label :class="[$style.dateLabel, $style.statusTitle]">Date:</label>
             <button
@@ -67,6 +80,10 @@ export default {
     leftArrowIcon,
   },
   props: {
+    tags: {
+      type: Array,
+      required: true,
+    },
     todos: {
       type: Array,
       required: true,
@@ -151,6 +168,24 @@ $visibilityIcon: 20px;
   margin: 1rem 0;
 }
 
+.hasNoTag {
+  border: 1px solid #ededed;
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 180%;
+    width: 1px;
+    background: red;
+    transform: rotate(45deg) translate(-50%, -50%);
+    transform-origin: 0% 0%;
+  }
+}
+
 .statusTitle {
   font-size: 0.9rem;
   font-weight: 100;
@@ -185,6 +220,20 @@ $visibilityIcon: 20px;
   font-size: 0.8em;
   display: block;
   text-align: center;
+}
+
+.tagsWrapper {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.tag {
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  margin: 0.3rem;
+  border-radius: 0.2rem;
+  display: block;
 }
 
 .filterWrapper,
