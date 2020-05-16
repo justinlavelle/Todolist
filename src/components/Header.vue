@@ -44,6 +44,7 @@
       </div>
     </Transition>
     <input
+      v-if="isInputAvailable"
       v-model="newTodoName"
       :class="$style.newTodo"
       type="text"
@@ -67,6 +68,7 @@ import DatePicker from './DatePicker'
 import { Sketch } from 'vue-color'
 import ColorPickerIcon from '@assets/color-picker.svg'
 import CalendarIcon from '@assets/calendar.svg'
+import moment from 'moment'
 
 export default {
   components: {
@@ -96,6 +98,13 @@ export default {
       datePickerVisible: false,
     }
   },
+  computed: {
+    isInputAvailable() {
+      return (
+        this.selectedDate.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')
+      )
+    },
+  },
   methods: {
     handleSketch(color) {
       return this.$emit('selectedColor', color)
@@ -111,7 +120,8 @@ export default {
 .wrapper {
   width: 100%;
   margin: 0;
-  position: fixed;
+  top: 0;
+  position: sticky;
   padding: 0;
   z-index: 2;
   -webkit-app-region: drag;
@@ -216,11 +226,10 @@ export default {
   border: none;
   font-size: 1.5em;
   font-weight: 200;
-  padding: 0.5em 1em;
-  height: 65px;
+  padding: 1em;
   width: 100%;
   margin: 0;
   outline: none;
-  box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.06);
 }
 </style>

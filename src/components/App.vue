@@ -10,6 +10,14 @@
       @createTodo="createTodo"
     />
     <div :class="$style.tasks">
+      <div
+        v-if="filteredTodos.length !== 0"
+        :class="[$style.allCompletedWrapper, { [$style.isSelected]: allDone }]"
+        @click="setAllCompleted"
+      >
+        <AllCompletedIcon :class="$style.allCompletedIcon" />
+        <span :class="$style.allCompletedText">Toggle all completed</span>
+      </div>
       <h2 v-if="filteredTodos.length === 0">
         There's no task
       </h2>
@@ -71,13 +79,13 @@
         </li>
       </TransitionGroup>
     </div>
-    <Footer
+    <Filters
+      v-if="filteredTodos.length !== 0"
       :remaining="remaining"
       :colors="colors"
       :todos="todos"
       :filter="filter"
       :status="status"
-      @setAllCompleted="setAllCompleted"
       @filterByAll="filter = 'all'"
       @filterByDate="filter = 'date'"
       @statusByAll="status = 'all'"
@@ -93,9 +101,10 @@ import Vue from 'vue'
 import * as database from '@core/db/methods'
 import moment from 'moment'
 import Header from './Header'
-import Footer from './Footer'
+import Filters from './Filters'
 import RunningTask from '../assets/runningTask.svg'
 import CompletedTask from '../assets/completedTask.svg'
+import AllCompletedIcon from '../assets/allcompleted.svg'
 import ua from 'universal-analytics'
 
 const DATE = 'date'
@@ -108,9 +117,10 @@ const ACTION_EDIT = 'action-edit'
 export default {
   components: {
     Header,
-    Footer,
+    Filters,
     RunningTask,
     CompletedTask,
+    AllCompletedIcon,
   },
   directives: {
     focus(el, value) {
@@ -184,6 +194,9 @@ export default {
         return [...acc, moment(todo.date).format('YYYY-MM-DD')]
       }, [])
     },
+    allDone() {
+      return this.remaining === 0
+    },
   },
   mounted() {
     this.todos = database.getTodos()
@@ -210,10 +223,10 @@ export default {
         return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
       })
     },
-    setAllCompleted(allDone) {
+    setAllCompleted() {
       this.todos = this.todos.map(todo => ({
         ...todo,
-        completed: !allDone,
+        completed: !this.allDone,
       }))
       database.setAllCompleted()
     },
@@ -312,10 +325,35 @@ section {
 }
 
 .tasks {
-  padding-top: 178px;
-  margin-bottom: 200px;
   position: relative;
   z-index: 1;
+}
+
+.allCompletedWrapper {
+  display: flex;
+  cursor: pointer;
+  padding: 1.5rem;
+  padding-left: 25px;
+  align-items: center;
+
+  &.isSelected {
+    .allCompletedIcon {
+      fill: #ededed;
+    }
+  }
+}
+
+.allCompletedIcon {
+  transition: fill 1s ease-in-out;
+  width: 40px;
+  display: inline-block;
+}
+
+.allCompletedText {
+  user-select: none;
+  margin-left: 15px;
+  font-weight: 100;
+  color: grey;
 }
 
 h2 {
@@ -330,10 +368,10 @@ ul {
   margin: 0;
 }
 
-li {
+.todo {
   position: relative;
   margin: 0;
-  padding: 1em;
+  padding: 1em 3rem;
   list-style-type: none;
 }
 
@@ -365,7 +403,11 @@ li {
 }
 
 .todo:not(:last-child) {
-  border-bottom: 1px solid #c2c2c2;
+  border-bottom: 1px solid #ededed;
+}
+
+.todo:first-child {
+  padding-top: 0;
 }
 
 .toggleIconsWrapper {
