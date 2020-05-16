@@ -31,12 +31,11 @@
       >
         <li
           v-for="(todo, index) in filteredTodos"
-          :key="moment(todo.date).unix()"
+          :key="todo.id || moment(todo.date).unix()"
           :class="[
             $style.todo,
             {
               [$style.editing]: todo === editing,
-              [$style.first]: index === todos.length - todos.length,
             },
           ]"
         >
@@ -155,13 +154,13 @@ export default {
         },
       },
       tags: [
-        { color: '#FF675D', id: 0, name: null },
-        { color: '#F9A74D', id: 1, name: null },
-        { color: '#F5CE53', id: 2, name: null },
-        { color: '#72CC57', id: 3, name: null },
-        { color: '#57B9F4', id: 4, name: null },
-        { color: '#D289E2', id: 5, name: null },
-        { color: '#A5A5A7', id: 6, name: null },
+        { color: '#FF675D', id: 1, name: null },
+        { color: '#F9A74D', id: 2, name: null },
+        { color: '#F5CE53', id: 3, name: null },
+        { color: '#72CC57', id: 4, name: null },
+        { color: '#57B9F4', id: 5, name: null },
+        { color: '#D289E2', id: 6, name: null },
+        { color: '#A5A5A7', id: 7, name: null },
       ],
       selectedDate: moment(),
       selectedTag: null,
@@ -257,12 +256,12 @@ export default {
     handleStatusCompleted() {
       this.status = 'completed'
     },
-    generateId() {
+    generateId(format = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') {
       let d = moment().unix()
 
       d += window.performance.now()
 
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      return format.replace(/[xy]/g, c => {
         const r = (d + Math.random() * 16) % 16 | 0
         d = Math.floor(d / 16)
 
@@ -288,10 +287,12 @@ export default {
     },
     createTodo(newTodo, tagId) {
       this.user.event(CATEGORY_TASK, ACTION_CREATE).send()
+      const date = moment()
 
       const todo = {
         name: newTodo,
-        date: moment(),
+        date,
+        id: `${this.generateId('xxxxxx')}${moment(date).unix()}`,
         tagId,
         completed: false,
       }

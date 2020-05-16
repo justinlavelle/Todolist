@@ -15,7 +15,7 @@
           <div :class="$style.tagsWrapper">
             <span
               v-for="tag in tags"
-              :key="tag"
+              :key="tag.id"
               :class="$style.tag"
               @click="$emit('filterByTag', tag)"
               :style="{ background: tag.color }"
