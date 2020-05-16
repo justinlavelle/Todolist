@@ -277,6 +277,7 @@ export default {
   display: inline-block;
   right: 0;
   margin: auto;
+  z-index: 5;
 }
 
 .calendar,

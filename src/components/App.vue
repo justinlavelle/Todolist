@@ -92,6 +92,7 @@
     <Filters
       :remaining="remaining"
       :colors="colors"
+      :selectedTags="selectedTags"
       :tags="tags"
       :todos="todos"
       :filter="filter"
@@ -166,7 +167,7 @@ export default {
         { color: '#A5A5A7', id: 7, name: null },
       ],
       selectedDate: moment(),
-      selectedTag: null,
+      selectedTags: [],
       filter: DATE,
       status: ALL,
       editing: null,
@@ -199,8 +200,8 @@ export default {
             : true,
         )
         .filter(todo =>
-          this.selectedTag
-            ? todo.tagId && todo.tagId === this.selectedTag.id
+          this.selectedTags.length > 0
+            ? todo.tagId && this.selectedTags.includes(todo.tagId)
             : true,
         )
     },
@@ -241,8 +242,20 @@ export default {
 
       return tags && tags.color
     },
-    handleFilterTag(tag) {
-      this.selectedTag = tag
+    handleFilterTag(tagId) {
+      if (!tagId) {
+        this.selectedTags = []
+        return
+      }
+
+      const withoutselectedTags = this.selectedTags.filter(
+        item => item !== tagId,
+      )
+      const tagToAdd = this.selectedTags.find(tag => tag === tagId)
+
+      this.selectedTags = !tagToAdd
+        ? [...withoutselectedTags, tagId]
+        : withoutselectedTags
     },
     handleFilterAll() {
       this.filter = 'all'

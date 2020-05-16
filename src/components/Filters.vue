@@ -14,15 +14,22 @@
         <div :class="$style.filters">
           <div :class="$style.tagsWrapper">
             <span
-              v-for="tag in tags"
-              :key="tag.id"
-              :class="$style.tag"
-              @click="$emit('filterByTag', tag)"
-              :style="{ background: tag.color }"
+              :class="[
+                $style.tag,
+                $style.hasNoTag,
+                { [$style.selected]: selectedTags.lenght > 0 },
+              ]"
+              @click="$emit('filterByTag')"
             />
             <span
-              :class="[$style.tag, $style.hasNoTag]"
-              @click="$emit('filterByTag')"
+              v-for="tag in tags"
+              :key="tag.id"
+              :class="[
+                $style.tag,
+                { [$style.selected]: selectedTags.includes(tag.id) },
+              ]"
+              @click="$emit('filterByTag', tag.id)"
+              :style="{ background: tag.color }"
             />
           </div>
           <div :class="$style.filterWrapper">
@@ -83,6 +90,10 @@ export default {
     tags: {
       type: Array,
       required: true,
+    },
+    selectedTags: {
+      type: Array,
+      default: null,
     },
     todos: {
       type: Array,
@@ -248,6 +259,10 @@ $visibilityIcon: 20px;
 
 .dateLabel {
   margin-right: 0.6rem;
+}
+
+.selected {
+  transform: scale(1.3);
 }
 
 .filterButton {
