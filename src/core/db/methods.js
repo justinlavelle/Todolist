@@ -16,12 +16,18 @@ const addTodos = todo =>
     .push(todo)
     .write()
 
-const updateTodo = todo =>
-  db
+const updateTodo = id => {
+  const todo = db
     .get('todos')
-    .find({ name: todo.name })
-    .assign(todo)
+    .find({ id })
+    .value()
+
+  return db
+    .get('todos')
+    .find({ id })
+    .assign({ ...todo, completed: !todo.completed })
     .write()
+}
 
 const deleteTodos = todo =>
   db

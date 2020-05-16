@@ -30,7 +30,7 @@
         :enter-active-class="$style.transitionEnterActive"
       >
         <li
-          v-for="(todo, index) in filteredTodos"
+          v-for="todo in filteredTodos"
           :key="todo.id || moment(todo.date).unix()"
           :class="[
             $style.todo,
@@ -41,13 +41,16 @@
         >
           <div :class="$style.view">
             <input
-              :id="`toggle-${index}`"
+              :id="`toggle-${todo.id}`"
               type="checkbox"
               :class="$style.toggle"
               :checked="todo.completed"
-              @click="completed(todo)"
+              @click="setCompleted(todo.id)"
             />
-            <label :class="$style.toggleIconsWrapper" :for="`toggle-${index}`">
+            <label
+              :class="$style.toggleIconsWrapper"
+              :for="`toggle-${todo.id}`"
+            >
               <CompletedTask v-if="todo.completed" />
               <RunningTask v-else />
             </label>
@@ -308,9 +311,16 @@ export default {
       this.user.event(CATEGORY_TASK, ACTION_EDIT).send()
       this.editing = todo
     },
-    completed(todo) {
-      todo.completed = !todo.completed
-      database.updateTodo(todo)
+    setCompleted(id) {
+      this.todos = this.todos.map(todo =>
+        todo.id === id
+          ? {
+              ...todo,
+              completed: !todo.completed,
+            }
+          : todo,
+      )
+      database.updateTodo(id)
     },
     deleteCompleted() {
       this.todos = this.todos.filter(item => !item.completed)
