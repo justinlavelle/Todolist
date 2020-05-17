@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from './components/App'
 import dotenv from 'dotenv'
+import vClickOutside from 'v-click-outside'
+
+Vue.use(vClickOutside)
 
 dotenv.config()
 

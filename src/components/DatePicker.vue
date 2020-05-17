@@ -39,26 +39,6 @@
           <span :class="$style.text">{{ day.format('D') }}</span>
         </div>
       </div>
-      <div :class="$style.buttons">
-        <button
-          :style="{
-            background: colors.hex,
-            border: '1px solid' + colors.hex,
-          }"
-          @click="$emit('close')"
-        >
-          Ok
-        </button>
-        <button
-          :style="{
-            background: colors.hex,
-            border: '1px solid' + colors.hex,
-          }"
-          @click="$emit('close')"
-        >
-          Cancel
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -150,7 +130,7 @@ export default {
 .agenda {
   background: rgba(white, 0.8);
   position: absolute;
-  box-shadow: 2px 6px 8px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 19px rgba(0, 0, 0, 0.12);
   top: 130px;
   width: 392px;
   left: 0;
@@ -186,51 +166,52 @@ export default {
   font-size: 1.5em;
 }
 
-.agenda .days {
+.days {
   width: 392px;
   padding: 0 14px 14px 14px;
 }
 
-.agenda .days .controls {
+.controls {
   position: relative;
   display: flex;
   align-items: center;
-  height: 56px;
+  height: 70px;
   justify-content: center;
   line-height: 56px;
 }
 
-.agenda .days .controls .arrows {
-  flex: 2;
+.arrows {
+  flex: 3;
   width: 24px;
   height: 24px;
   fill: rgba(0, 0, 0, 0.2);
   vertical-align: middle;
 }
 
-.agenda .days .controls label {
+.controls label {
   white-space: nowrap;
   flex: 2;
   color: #757575;
 }
 
-.agenda .days .weekdays {
-  border-bottom: 1px solid #c2c2c2;
+.weekdays {
+  border-bottom: 1px solid #ededed;
   text-align: center;
   color: #757575;
   padding: 14px;
+  padding-top: 0;
   width: 52px;
   display: inline-block;
 }
 
-.agenda .days .spacer {
+.spacer {
   height: 52px;
   vertical-align: top;
   text-align: center;
   display: inline-block;
 }
 
-.agenda .days .day {
+.day {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -246,7 +227,10 @@ export default {
 
 .agenda .days .day.selected .overlay {
   opacity: 1;
-  transform: scale(1);
+  position: absolute;
+  transform: translate(-50%, -50%) scale(1);
+  top: 50%;
+  left: 50%;
 }
 
 .agenda .days .day:hover .text {
@@ -254,32 +238,39 @@ export default {
 }
 
 .agenda .days .day:hover .overlay {
-  transform: scale(1);
+  transform: translate(-50%, -50%) scale(1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
   opacity: 0.6;
 }
 
-.agenda .days .day .overlay {
+.overlay {
+  transform-origin: center;
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
   position: absolute;
-  transform: scale(0);
   opacity: 0;
   z-index: 0;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
+  top: 50%;
+  left: 50%;
+  color: white;
+  height: 80%;
+  width: 80%;
+  transform: translate(-50%, -50%) scale(0);
   border-radius: 50%;
 }
 
-.agenda .days .day .taskedOverlay {
+.taskedOverlay {
+  transform-origin: center;
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
   position: absolute;
+  transform: translate(-50%, -50%);
   z-index: -1;
   box-shadow: 0px 0px 0px 1px #c2c2c2;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
+  top: 50%;
+  left: 50%;
+  height: 80%;
+  width: 80%;
   border-radius: 50%;
 }
 
@@ -287,30 +278,19 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  background: #c2c2c2;
+  transform: translate(-50%, -50%);
+  background: #ededed;
   z-index: -1;
-  height: 100%;
-  width: 100%;
+  top: 50%;
+  left: 50%;
+  height: 80%;
+  width: 80%;
   border-radius: 50%;
 }
 
-.agenda .days .day .text {
+.text {
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   color: #757575;
-}
-
-.agenda .buttons {
-  text-align: right;
-}
-
-.agenda .buttons button {
-  cursor: pointer;
-  outline: none;
-  padding: 0.6em 1em;
-  border-radius: 0.2em;
-  margin-left: 1em;
-  color: white;
-  text-transform: uppercase;
 }
 </style>

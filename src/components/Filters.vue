@@ -1,5 +1,8 @@
 <template>
-  <div :class="[$style.wrapper, { [$style.isVisible]: isVisible }]">
+  <div
+    :class="[$style.wrapper, { [$style.isVisible]: isVisible }]"
+    v-click-outside="hideFilters"
+  >
     <div
       :class="[$style.toggleVisibilityPanel, { [$style.isVisible]: isVisible }]"
       @click="toggleVisibility"
@@ -122,6 +125,9 @@ export default {
     }
   },
   methods: {
+    hideFilters() {
+      this.isVisible = false
+    },
     toggleVisibility() {
       this.isVisible = !this.isVisible
     },

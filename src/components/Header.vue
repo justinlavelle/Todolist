@@ -16,6 +16,7 @@
       </div>
       <DatePicker
         v-if="datePickerVisible"
+        v-click-outside="hideDatePicker"
         :colors="colors"
         :selected-date="selectedDate"
         :tasked-days="taskedDays"
@@ -24,7 +25,11 @@
       />
     </div>
     <Transition name="slideUp">
-      <div v-if="colorPickerVisible" :class="$style.pickerContent">
+      <div
+        v-if="colorPickerVisible"
+        v-click-outside="hideColorPicker"
+        :class="$style.pickerContent"
+      >
         <Sketch :class="$style.sketch" :value="colors" @input="handleSketch" />
         <button
           :style="{
@@ -52,8 +57,8 @@
         placeholder="Create a task"
         @keyup.enter="createTodo"
       />
-      <div :class="$style.colorSelector">
-        <div :class="$style.topWrapper" @click="toggleColorsSelector">
+      <div :class="$style.tagSelector" v-click-outside="hideTagSelector">
+        <div :class="$style.topWrapper" @click="toggleTagSelectorVisibility">
           <span
             :class="[
               $style.currentTag,
@@ -64,7 +69,7 @@
           />
           <DownArrowIcon :class="$style.downArrowIcon" />
         </div>
-        <div v-if="showColorsSelector" :class="$style.tagsWrapper">
+        <div v-if="tagSelectorVisible" :class="$style.tagsWrapper">
           <span
             v-for="tag in tags"
             :key="tag.id"
@@ -121,7 +126,7 @@ export default {
       newTodoName: '',
       colorPickerVisible: false,
       datePickerVisible: false,
-      showColorsSelector: false,
+      tagSelectorVisible: false,
       selectedTag: null,
     }
   },
@@ -145,8 +150,17 @@ export default {
       )
       this.newTodoName = ''
     },
-    toggleColorsSelector() {
-      this.showColorsSelector = !this.showColorsSelector
+    hideColorPicker() {
+      this.colorPickerVisible = false
+    },
+    hideDatePicker() {
+      this.datePickerVisible = false
+    },
+    hideTagSelector() {
+      this.tagSelectorVisible = false
+    },
+    toggleTagSelectorVisibility() {
+      this.tagSelectorVisible = !this.tagSelectorVisible
     },
     setSelectedTag(tag) {
       this.selectedTag = tag
@@ -209,7 +223,7 @@ export default {
   box-shadow: 0px 0px 19px rgba(0, 0, 0, 0.12);
 }
 
-.colorSelector {
+.tagSelector {
   position: absolute;
   top: 25px;
   border-radius: 0.2rem;
