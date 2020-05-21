@@ -235,6 +235,7 @@ export default {
       return
     }
     this.user = ua(process.env.GOOGLE_ANALYTICS_ID, userId)
+    this.user.event('user', 'connect').send()
   },
   methods: {
     getTagColor(tagId) {
