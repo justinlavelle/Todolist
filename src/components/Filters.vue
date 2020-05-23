@@ -7,7 +7,7 @@
       :class="[$style.toggleVisibilityPanel, { [$style.isVisible]: isVisible }]"
       @click="toggleVisibility"
     >
-      <leftArrowIcon :class="$style.leftArrowIcon" />
+      <LeftArrowIcon :class="$style.leftArrowIcon" />
     </div>
     <div :class="$style.content">
       <span :class="$style.remainingTasks">
@@ -83,11 +83,11 @@
 </template>
 
 <script>
-import leftArrowIcon from '../assets/leftArrow.svg'
+import LeftArrowIcon from '../assets/leftArrow.svg'
 
 export default {
   components: {
-    leftArrowIcon,
+    LeftArrowIcon,
   },
   props: {
     tags: {
