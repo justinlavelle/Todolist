@@ -234,6 +234,7 @@ export default {
   },
   created() {
     ipcRenderer.on('update-available', (event, { state, information }) => {
+      console.log(information)
       this.updates.available = state
       this.updates.information = information
     })

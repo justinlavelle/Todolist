@@ -5,7 +5,6 @@ let mainWindow
 const port = process.env.PORT || 8080
 
 autoUpdater.on('update-available', informations => {
-  console.log(informations)
   mainWindow.webContents.send('update-available', { state: true, informations })
 })
 
