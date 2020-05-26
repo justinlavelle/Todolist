@@ -38,6 +38,10 @@
       ]
     },
     "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "entitlements.mac.plist",
+      "entitlementsInherit": "entitlements.mac.plist",
       "icon": "icons/icon.icns"
     },
     "win": {
