@@ -12,7 +12,7 @@
           >
             <ProgressBar
               :class="$style.progressBar"
-              :width="`${updates.progressObj.pourcent}%`"
+              :width="`${updates.progressObj.percent}%`"
             />
             <div :class="$style.updateText">
               <div>
@@ -120,6 +120,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import moment from 'moment'
 import { Sketch } from 'vue-color'
@@ -205,7 +206,7 @@ export default {
       this.tagSelectorVisible = false
     },
     handleInstall() {
-      autoUpdater.quitAndInstall()
+      ipcRenderer.send('install-update')
     },
     hideUpdatesPanel() {
       this.updatesPanelVisible = false

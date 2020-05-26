@@ -5,6 +5,7 @@ let mainWindow
 const port = process.env.PORT || 8080
 
 autoUpdater.on('update-available', informations => {
+  console.log(informations)
   mainWindow.webContents.send('update-available', { state: true, informations })
 })
 
@@ -12,6 +13,10 @@ autoUpdater.on('update-not-available', () => {
   mainWindow.webContents.send('update-available', {
     state: false,
   })
+})
+
+ipcMain.on('install-update', () => {
+  autoUpdater.quitAndInstall()
 })
 
 autoUpdater.on('download-progress', progressObj => {
