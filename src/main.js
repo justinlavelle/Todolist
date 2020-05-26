@@ -1,16 +1,37 @@
 const { app, BrowserWindow } = require('electron')
+const { autoUpdater } = require('electron-updater')
 
 let mainWindow
 const port = process.env.PORT || 8080
 
+autoUpdater.on('update-available', informations => {
+  mainWindow.webContents.send('update-available', { state: true, informations })
+})
+
+autoUpdater.on('update-not-available', () => {
+  mainWindow.webContents.send('update-available', {
+    state: false,
+  })
+})
+
+autoUpdater.on('download-progress', progressObj => {
+  mainWindow.webContents.send('download-progress', progressObj)
+})
+
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update-downloaded')
+})
+
 function createWindow() {
+  if (process.env.NODE_ENV === 'production') {
+    autoUpdater.checkForUpdates()
+  }
+
   const winURL =
     process.env.NODE_ENV === 'production'
       ? `file://${__dirname}/index.html`
       : `http://localhost:${port}/dist`
-  /**
-   * Initial window options
-   */
+
   mainWindow = new BrowserWindow({
     useContentSize: true,
     titleBarStyle: 'hidden-inset',
@@ -43,23 +64,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */

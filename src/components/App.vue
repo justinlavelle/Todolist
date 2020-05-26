@@ -5,6 +5,7 @@
       :colors="colors"
       :taskedDays="taskedDays"
       :tags="tags"
+      :updates="updates"
       @saveColor="saveColor"
       @selectedDate="setDate"
       @selectedColor="setColor"
@@ -109,6 +110,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 import Vue from 'vue'
 import * as database from '@core/db/methods'
 import moment from 'moment'
@@ -148,6 +150,12 @@ export default {
   data() {
     return {
       user: null,
+      updates: {
+        available: false,
+        downloaded: false,
+        progressObj: {},
+        informations: null,
+      },
       todos: [],
       colors: database.getColor() || {
         hex: '#5CBCE9',
@@ -223,6 +231,19 @@ export default {
     allDone() {
       return this.remaining === 0
     },
+  },
+  created() {
+    ipcRenderer.on('update-available', (event, { state, information }) => {
+      this.updates.available = state
+      this.updates.information = information
+    })
+    ipcRenderer.on('download-progress', (event, progressObj) => {
+      console.log(progressObj)
+      this.updates.progressObj = progressObj
+    })
+    ipcRenderer.on('update-downloaded', event => {
+      this.updates.downloaded = true
+    })
   },
   mounted() {
     this.todos = database.getTodos()

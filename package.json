@@ -23,6 +23,7 @@
       "dist/electron/**/*"
     ],
     "dmg": {
+      "sign": false,
       "contents": [
         {
           "x": 410,
@@ -76,7 +77,9 @@
     "dotenv-webpack": "^1.7.0",
     "electron": "^7.1.9",
     "electron-builder": "^22.2.0",
+    "electron-updater": "^4.3.1",
     "electron-debug": "^1.1.0",
+    "electron-log": "^4.2.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-config-standard": "^10.2.1",
