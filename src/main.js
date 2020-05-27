@@ -4,8 +4,8 @@ const { autoUpdater } = require('electron-updater')
 let mainWindow
 const port = process.env.PORT || 8080
 
-autoUpdater.on('update-available', informations => {
-  mainWindow.webContents.send('update-available', { state: true, informations })
+autoUpdater.on('update-available', information => {
+  mainWindow.webContents.send('update-available', { state: true, information })
 })
 
 autoUpdater.on('update-not-available', () => {

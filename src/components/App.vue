@@ -239,7 +239,6 @@ export default {
       this.updates.information = information
     })
     ipcRenderer.on('download-progress', (event, progressObj) => {
-      console.log(progressObj)
       this.updates.progressObj = progressObj
     })
     ipcRenderer.on('update-downloaded', event => {
