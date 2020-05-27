@@ -61,7 +61,7 @@
               @dblclick="editTodo(todo)"
             >
               <span :class="$style.date">
-                {{ moment(todo.date).format('h:mm:ss a') }}
+                {{ moment(todo.date).format(getFormat) }}
               </span>
               <label
                 :class="[$style.label, { [$style.completed]: todo.completed }]"
@@ -182,6 +182,11 @@ export default {
     }
   },
   computed: {
+    getFormat() {
+      const selectedDate = this.filter !== 'all' && this.selectedDate
+
+      return selectedDate ? 'h:mm:ss a' : 'YYYY-MM-DD'
+    },
     moment() {
       return moment
     },

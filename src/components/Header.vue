@@ -89,9 +89,8 @@
         </button>
       </div>
     </Transition>
-    <div :class="$style.inputWrapper">
+    <div v-if="isInputAvailable" :class="$style.inputWrapper">
       <input
-        v-if="isInputAvailable"
         v-model="newTodoName"
         :class="$style.newTodo"
         type="text"
