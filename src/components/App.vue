@@ -84,7 +84,7 @@
             v-focus="todo === editing"
             :class="$style.edit"
             type="text"
-            @keyup.enter="doneEdit(todo)"
+            @keyup.enter="doneEdit(todo.id, todo.name)"
             @blur="editing = false"
           />
         </li>
@@ -310,7 +310,9 @@ export default {
         ...todo,
         completed: !this.allDone,
       }))
-      database.setAllCompleted()
+      const selectedDate = this.filter !== 'all' && this.selectedDate
+
+      database.toggleAllCompleted(selectedDate, this.allDone)
     },
     saveColor() {
       database.addColor(this.colors)
@@ -354,15 +356,15 @@ export default {
             }
           : todo,
       )
-      database.updateTodo(id)
+      database.setTodoCompleted(id)
     },
     deleteCompleted() {
       this.todos = this.todos.filter(item => !item.completed)
       database.deleteCompleted()
     },
-    doneEdit(todo) {
+    doneEdit(todoId, todoName) {
       this.editing = false
-      database.updateTodo(todo)
+      database.editTodo(todoId, todoName)
     },
   },
 }

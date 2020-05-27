@@ -1,3 +1,4 @@
+import moment from 'moment'
 import db from './datastore'
 
 const getColor = () => db.getState().color
@@ -10,13 +11,7 @@ const getUserId = () => db.getState().userId
 
 const setUserId = userId => db.set('userId', userId).write()
 
-const addTodos = todo =>
-  db
-    .get('todos')
-    .push(todo)
-    .write()
-
-const updateTodo = id => {
+const setTodoCompleted = id => {
   const todo = db
     .get('todos')
     .find({ id })
@@ -29,18 +24,50 @@ const updateTodo = id => {
     .write()
 }
 
+const addTodos = todo =>
+  db
+    .get('todos')
+    .push(todo)
+    .write()
+
 const deleteTodos = todo =>
   db
     .get('todos')
     .remove(todo)
     .write()
 
-const setAllCompleted = _ =>
-  db
+const editTodo = (id, newName) => {
+  const todo = db
     .get('todos')
-    .find({ completed: false })
-    .assign({ completed: true })
+    .find({ id })
+    .value()
+
+  db.get('todos')
+    .find({ id })
+    .assign({ ...todo, name: newName })
     .write()
+}
+
+const toggleAllCompleted = (selectedDate, allDone) => {
+  if (!selectedDate) {
+    db.get('todos')
+      .each(todo => {
+        todo.completed = allDone
+      })
+      .write()
+    return
+  }
+
+  db.get('todos')
+    .filter(
+      ({ date }) =>
+        moment(date).format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD'),
+    )
+    .each(todo => {
+      todo.completed = allDone
+    })
+    .write()
+}
 
 const deleteCompleted = _ => {
   db.get('todos')
@@ -55,8 +82,9 @@ export {
   addColor,
   getTodos,
   addTodos,
-  updateTodo,
+  setTodoCompleted,
+  editTodo,
   deleteTodos,
-  setAllCompleted,
+  toggleAllCompleted,
   deleteCompleted,
 }
