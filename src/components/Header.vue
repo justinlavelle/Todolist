@@ -15,9 +15,15 @@
               :width="`${updates.progressObj.percent}%`"
             />
             <div :class="$style.updateText">
-              <div>
+              <a
+                v-if="updates.information"
+                :class="$style.updateReleaseLink"
+                :href="
+                  `https://github.com/blaadje/Todo-list/releases/tag/${updates.information.name}`
+                "
+              >
                 {{ updates.information && updates.information.version }}
-              </div>
+              </a>
               <div :class="$style.isAvailableText">is available !</div>
               <div
                 v-if="updates.downloaded"
@@ -439,9 +445,9 @@ export default {
   position: relative;
   border-radius: 100%;
   transition: background 0.3s ease;
+  cursor: pointer;
 
   &:hover {
-    cursor: pointer;
     background: rgba(white, 0.2);
   }
 }
@@ -508,5 +514,9 @@ export default {
   width: 100%;
   position: relative;
   z-index: 10;
+}
+
+.updateReleaseLink {
+  color: #0266d6;
 }
 </style>

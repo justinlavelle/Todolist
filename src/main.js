@@ -38,12 +38,10 @@ function createWindow() {
 
   mainWindow = new BrowserWindow({
     useContentSize: true,
-    titleBarStyle: 'hidden-inset',
+    titleBarStyle: 'hiddenInset',
     height: 800,
     width: 550,
-    frame: false,
     webPreferences: {
-      webSecurity: false,
       nodeIntegration: true,
     },
   })
