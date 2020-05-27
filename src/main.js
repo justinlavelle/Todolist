@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, shell } = require('electron')
 const { autoUpdater } = require('electron-updater')
 
 let mainWindow
@@ -16,6 +16,10 @@ autoUpdater.on('update-not-available', () => {
 
 ipcMain.on('install-update', () => {
   autoUpdater.quitAndInstall()
+})
+
+ipcMain.on('open-release-link', (event, url) => {
+  shell.openExternal(url)
 })
 
 autoUpdater.on('download-progress', progressObj => {

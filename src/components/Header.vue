@@ -18,9 +18,12 @@
               <a
                 v-if="updates.information"
                 :class="$style.updateReleaseLink"
-                :href="
-                  `https://github.com/blaadje/Todo-list/releases/tag/${updates.information.name}`
+                @click.prevent="
+                  handleClickReleaseLink(
+                    `https://github.com/blaadje/Todo-list/releases/tag/${updates.information.name}`,
+                  )
                 "
+                href="#"
               >
                 {{ updates.information && updates.information.version }}
               </a>
@@ -213,6 +216,9 @@ export default {
     },
     handleInstall() {
       ipcRenderer.send('install-update')
+    },
+    handleClickReleaseLink(url) {
+      ipcRenderer.send('open-release-link', url)
     },
     hideUpdatesPanel() {
       this.updatesPanelVisible = false
