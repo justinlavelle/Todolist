@@ -20,7 +20,7 @@
                 :class="$style.updateReleaseLink"
                 @click.prevent="
                   handleClickReleaseLink(
-                    `https://github.com/blaadje/Todo-list/releases/tag/${updates.information.name}`,
+                    `https://github.com/blaadje/Todo-list/releases/tag/${updates.information.releaseName}`,
                   )
                 "
                 href="#"
