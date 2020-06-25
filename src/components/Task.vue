@@ -1,5 +1,6 @@
 <template>
   <div
+    v-on="$listeners"
     :class="[
       $style.task,
       {
@@ -7,7 +8,7 @@
       },
     ]"
   >
-    <div :class="$style.view">
+    <div :class="$style.view" v-if="editingText === null">
       <input
         :id="`toggle-${task.id}`"
         type="checkbox"
@@ -19,11 +20,7 @@
         <CompletedTaskIcon v-if="task.completed" />
         <RunningTaskIcon v-else />
       </label>
-      <div
-        :class="$style.textWrapper"
-        v-if="!editingText"
-        @dblclick="editingTaskName"
-      >
+      <div :class="$style.textWrapper" @dblclick="editingTaskName">
         <span :class="$style.date">
           {{ moment(task.date).format(taskDateFormat) }}
         </span>
@@ -38,7 +35,7 @@
       />
     </div>
     <input
-      v-if="editingText"
+      v-if="editingText !== null"
       v-model="editingText"
       v-focus="editingText"
       :class="$style.editingTextInput"
@@ -101,7 +98,16 @@ export default {
   },
   methods: {
     handleEditTask() {
-      this.$emit('editTask', this.task.id, this.editingText)
+      if (!this.editingText) {
+        return
+      }
+
+      const task = {
+        ...this.task,
+        name: this.editingText,
+      }
+
+      this.$emit('editTask', task)
       this.editingText = null
     },
     editingTaskName() {
@@ -115,22 +121,15 @@ export default {
 .task {
   position: relative;
   margin: 0;
-  padding: 1em 3rem;
-  list-style-type: none;
-
+  padding-left: 1rem;
+  padding-right: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   &:hover {
     .destroy {
       fill: #ededed;
     }
   }
-}
-
-.task:not(:last-child) {
-  border-bottom: 1px solid #ededed;
-}
-
-.task:first-child {
-  padding-top: 0;
 }
 
 .editingTextInput {

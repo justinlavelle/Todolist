@@ -26,23 +26,24 @@
     <h2 v-if="!hasTask">
       There's no task
     </h2>
-    <TransitionGroup
-      v-if="hasTask"
-      :appear="false"
-      :enter-class="$style.transitionEnter"
-      :enter-active-class="$style.transitionEnterActive"
+    <DraggableList
+      :list="filteredByStatusTasks"
+      :disabled="disableDrag"
+      @orderedTasks="handleOrderedTasks"
     >
-      <Task
-        v-for="task in filteredByStatusTasks"
-        :key="task.id || moment(task.date).unix()"
-        :task="task"
-        :tags="tags"
-        :taskDateFormat="getFormat"
-        @setTaskCompleted="toggleTaskCompleted"
-        @deleteTask="deleteTask"
-        @editTask="editTask"
-      />
-    </TransitionGroup>
+      <template #default="{ task }">
+        <Task
+          :class="$style.task"
+          :task="task"
+          :tags="tags"
+          :taskDateFormat="getFormat"
+          @setTaskCompleted="toggleTaskCompleted"
+          @deleteTask="deleteTask"
+          @editTask="editTask"
+        />
+      </template>
+    </DraggableList>
+
     <Filters
       :remaining="remaining"
       :colors="colors"
@@ -62,6 +63,7 @@
 
 <script>
 import { ipcRenderer } from 'electron'
+
 import * as database from '@core/db/methods'
 import moment from 'moment'
 import Header from './Header'
@@ -70,6 +72,7 @@ import TaskHeader from './TaskHeader'
 import Task from './Task'
 import UpdatesPanel from './UpdatesPanel'
 import TaskGenerator from './TaskGenerator'
+import DraggableList from './DraggableList'
 
 import ua from 'universal-analytics'
 
@@ -88,6 +91,7 @@ export default {
     TaskGenerator,
     Task,
     UpdatesPanel,
+    DraggableList,
   },
   data() {
     return {
@@ -123,6 +127,13 @@ export default {
     }
   },
   computed: {
+    disableDrag() {
+      return (
+        this.filter === ALL ||
+        this.status !== ALL ||
+        this.selectedTags.length > 0
+      )
+    },
     isInputAvailable() {
       return (
         this.selectedDate.format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')
@@ -131,8 +142,11 @@ export default {
     hasTask() {
       return this.filteredByStatusTasks.length !== 0
     },
+    selectedDateView() {
+      return this.filter !== ALL && this.selectedDate
+    },
     getFormat() {
-      const selectedDate = this.filter !== 'all' && this.selectedDate
+      const selectedDate = this.selectedDateView
 
       return selectedDate ? 'h:mm:ss a' : 'YYYY-MM-DD'
     },
@@ -166,7 +180,7 @@ export default {
     },
     filteredTasks() {
       return this.tasks
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => b.orderIndex - a.orderIndex)
         .filter(task =>
           this.filter === DATE
             ? moment(task.date).format('YYYY-MM-DD') ===
@@ -216,6 +230,17 @@ export default {
       database.getUserId(),
     ])
     this.tasks = tasks
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .map((task, index) => {
+        if (task.orderIndex) {
+          return task
+        }
+
+        return {
+          ...task,
+          orderIndex: index,
+        }
+      })
 
     if (!userId) {
       const generateId = this.generateId()
@@ -227,6 +252,9 @@ export default {
     this.user.event('user', 'connect').send()
   },
   methods: {
+    handleOrderedTasks(orderedTasks) {
+      this.editTasks(orderedTasks)
+    },
     transferRemainingTasks() {
       this.tasks = this.tasks.map(task => {
         if (moment(task.date).unix() >= moment().unix() || task.completed) {
@@ -257,13 +285,13 @@ export default {
         : withoutselectedTags
     },
     handleFilterAll() {
-      this.filter = 'all'
+      this.filter = ALL
     },
     handleFilterDate() {
-      this.filter = 'date'
+      this.filter = DATE
     },
     handleStatusAll() {
-      this.status = 'all'
+      this.status = ALL
     },
     handleStatusTodo() {
       this.status = 'todo'
@@ -284,9 +312,8 @@ export default {
       })
     },
     toggleAllCompleted() {
-      const selectedDate = this.filter !== 'all' && this.selectedDate
       const getCompletedTasks = () => {
-        if (!selectedDate) {
+        if (!this.selectedDateView) {
           return this.tasks.map(task => {
             return {
               ...task,
@@ -326,10 +353,13 @@ export default {
     createTask(newTask, tagId) {
       this.user.event(CATEGORY_TASK, ACTION_CREATE).send()
       const date = this.selectedDate
+      const higherTaskIndex =
+        (this.tasks.length && this.tasks[0].orderIndex) || 0
 
       const task = {
         name: newTask,
         date,
+        orderIndex: higherTaskIndex + 1,
         id: `${this.generateId('xxxxxx')}${moment(date).unix()}`,
         tagId,
         completed: false,
@@ -341,10 +371,6 @@ export default {
       this.user.event(CATEGORY_TASK, ACTION_DELETE).send()
       this.tasks = this.tasks.filter(({ id }) => id !== taskId)
       database.deleteTask(taskId)
-    },
-    editTodo(task) {
-      this.user.event(CATEGORY_TASK, ACTION_EDIT).send()
-      this.editing = task
     },
     toggleTaskCompleted(taskId) {
       this.tasks = this.tasks.map(task => {
@@ -359,19 +385,21 @@ export default {
       })
       database.toggleTaskCompleted(taskId)
     },
-    editTask(taskId, taskName) {
+    editTask(editedTask) {
+      this.tasks = this.tasks.map(task =>
+        task.id === editedTask.id ? editedTask : task,
+      )
+      this.user.event(CATEGORY_TASK, ACTION_EDIT).send()
+      database.editTask(editedTask)
+    },
+    editTasks(editedTasks) {
       this.tasks = this.tasks.map(task => {
-        if (task.id !== taskId) {
-          return task
-        }
+        const editedTask = editedTasks.find(({ id }) => id === task.id) || false
 
-        return {
-          ...task,
-          name: taskName,
-        }
+        return editedTask ? editedTask : task
       })
       this.user.event(CATEGORY_TASK, ACTION_EDIT).send()
-      database.editTask(taskId, taskName)
+      database.editTasks(editedTasks)
     },
   },
 }
@@ -429,12 +457,7 @@ ul {
   transform: translateY(0);
 }
 
-.transitionEnterActive {
-  transition: transform 0.5s cubic-bezier(0, 0.54, 0.5, 1);
-  transform: translateX(0);
-}
-
-.transitionEnter {
-  transform: translateX(-400px);
+.task {
+  flex: 1;
 }
 </style>
