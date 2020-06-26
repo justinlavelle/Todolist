@@ -8,6 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
       - uses: tclindner/sentry-releases-action@v1.2.0
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -15,4 +17,12 @@ jobs:
           SENTRY_PROJECT: todolist
         with:
           tagName: ${{ github.ref }}
+          environment: production
+      - uses: tclindner/sentry-release-deploy-action@v1.0.0
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: alexandrecharlot
+          SENTRY_PROJECT: todolist
+        with:
+          version: ${{ github.ref }}
           environment: production
