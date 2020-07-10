@@ -29,7 +29,6 @@
         key="taskGenerator"
       />
       <TaskHeader
-        v-if="hasTask"
         :hasRemainingTask="hasRemainingTask"
         :isToday="isToday"
         :areTasksAllDone="areTasksAllDone"
