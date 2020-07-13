@@ -1,4 +1,5 @@
 const Dotenv = require('dotenv-webpack')
+const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 const path = require('path')
 const { dependencies } = require('../../package.json')
 const config = require('../webpack.base')
@@ -10,6 +11,12 @@ let rendererConfig = {
     ...config.plugins,
     new Dotenv({
       systemvars: true,
+    }),
+    new SentryWebpackPlugin({
+      include: '.',
+      ignoreFile: '.sentrycliignore',
+      ignore: ['node_modules', 'webpack.config.js'],
+      configFile: 'sentry.properties',
     }),
   ],
   entry: {
