@@ -276,7 +276,7 @@ export default {
       })
     const generateId = this.generateId()
     const user = ua(process.env.GOOGLE_ANALYTICS_ID, userId || generateId)
-    
+
     if (!userId) {
       database.setUserId(generateId)
     }
