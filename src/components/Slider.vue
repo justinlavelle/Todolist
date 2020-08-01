@@ -51,6 +51,9 @@ export default {
     this.$refs.wrapper.addEventListener('mousedown', this.addMouseMoveEvent)
     this.$refs.wrapper.addEventListener('mouseleave', this.removeMouseMoveEvent)
   },
+  activated() {
+    this.handleResize()
+  },
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
   },
